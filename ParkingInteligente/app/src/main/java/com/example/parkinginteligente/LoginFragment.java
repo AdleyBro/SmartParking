@@ -1,5 +1,6 @@
 package com.example.parkinginteligente;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +18,7 @@ public class LoginFragment extends Fragment {
             Bundle savedInstanceState
     ) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.login_layout, container, false);
+        return inflater.inflate(R.layout.fragment_login, container, false);
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
@@ -27,8 +28,17 @@ public class LoginFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 // TODO: Escribir código para iniciar sesión
+
+                // Con el intent cambiamos a otra actividad que contiene el menú desplegable
+                Intent intent = new Intent (view.getContext(), MainMenuActivity.class);
+                startActivityForResult(intent, 0);
+
+                getActivity().finish(); // Cierra la actividad de inicio de sesión para no volver
+
+                /* //Esto era para cambiar de un fragment a otro
                 NavHostFragment.findNavController(LoginFragment.this)
                         .navigate(R.id.action_LoginFragment_to_RegisterFragment);
+                 */
             }
         });
 
