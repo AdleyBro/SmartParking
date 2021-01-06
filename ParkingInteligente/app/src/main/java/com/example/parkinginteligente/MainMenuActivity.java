@@ -76,7 +76,7 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
         Toast.makeText(this, "Clicked item one", Toast.LENGTH_SHORT).show();
         switch(menuItem.getItemId()) {
             case R.id.nav_cerrar_sesion:
-                Log.d("CACA", "COOOO");
+                Log.d("HEY", "COOOO");
                 Toast.makeText(this, "Clicked item one", Toast.LENGTH_SHORT).show();
                 getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
                         new RegisterFragment()).commit();
