@@ -7,33 +7,22 @@
 
     <fragment
         android:id="@+id/LoginFragment"
-        android:name="com.example.parkinginteligente.LoginFragment"
+        android:name="com.uahcu.parkinginteligente.LoginFragment"
         android:label="@string/login_fragment_label"
         tools:layout="@layout/fragment_login">
 
         <action
             android:id="@+id/action_LoginFragment_to_RegisterFragment"
             app:destination="@id/RegisterFragment" />
-        <action
-            android:id="@+id/action_LoginFragment_to_mainMenuFragment"
-            app:destination="@id/mainMenuFragment" />
     </fragment>
     <fragment
         android:id="@+id/RegisterFragment"
-        android:name="com.example.parkinginteligente.RegisterFragment"
+        android:name="com.uahcu.parkinginteligente.RegisterFragment"
         android:label="@string/register_fragment_label"
         tools:layout="@layout/fragment_register">
 
         <action
             android:id="@+id/action_RegisterFragment_to_LoginFragment"
             app:destination="@id/LoginFragment" />
-        <action
-            android:id="@+id/action_RegisterFragment_to_mainMenuFragment"
-            app:destination="@id/mainMenuFragment" />
     </fragment>
-    <fragment
-        android:id="@+id/mainMenuFragment"
-        android:name="com.example.parkinginteligente.MainMenuFragment"
-        android:label="fragment_main_menu"
-        tools:layout="@layout/fragment_main_menu" />
 </navigation>

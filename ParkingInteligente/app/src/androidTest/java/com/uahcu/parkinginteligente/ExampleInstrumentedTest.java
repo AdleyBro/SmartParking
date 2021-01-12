@@ -1,4 +1,4 @@
-package com.example.parkinginteligente;
+package com.uahcu.parkinginteligente;
 
 import android.content.Context;
 

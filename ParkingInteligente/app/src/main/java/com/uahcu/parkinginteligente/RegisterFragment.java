@@ -1,4 +1,4 @@
-package com.example.parkinginteligente;
+package com.uahcu.parkinginteligente;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

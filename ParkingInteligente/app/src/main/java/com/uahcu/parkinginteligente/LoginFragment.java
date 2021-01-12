@@ -1,4 +1,4 @@
-package com.example.parkinginteligente;
+package com.uahcu.parkinginteligente;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -34,18 +34,12 @@ public class LoginFragment extends Fragment {
                 startActivityForResult(intent, 0);
 
                 getActivity().finish(); // Cierra la actividad de inicio de sesión para no volver
-
-                /* //Esto era para cambiar de un fragment a otro
-                NavHostFragment.findNavController(LoginFragment.this)
-                        .navigate(R.id.action_LoginFragment_to_RegisterFragment);
-                 */
             }
         });
 
         view.findViewById(R.id.button_crear_cuenta).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: Escribir código para registrar usuario en la base de datos
                 NavHostFragment.findNavController(LoginFragment.this)
                         .navigate(R.id.action_LoginFragment_to_RegisterFragment);
             }

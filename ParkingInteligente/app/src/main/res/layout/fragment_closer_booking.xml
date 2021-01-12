@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:orientation="vertical"
+    tools:context=".CloserBookingFragment" >
+
+    <TextView
+        android:id="@+id/text_booking_date_time"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center_vertical"
+        android:paddingStart="20dp"
+        android:text="Fecha y hora:"
+        android:textColor="@color/colorSecondary"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/text_localizacion"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center_vertical"
+        android:paddingStart="20dp"
+        android:text="@string/localizacion"
+        android:textColor="@color/colorSecondary"
+        android:textSize="24sp" />
+
+    <com.google.android.gms.maps.MapView
+        android:id="@+id/mapCloserBooking"
+        android:layout_width="match_parent"
+        android:layout_height="231dp"
+        android:apiKey="@string/google_maps_key" />
+
+</LinearLayout>
