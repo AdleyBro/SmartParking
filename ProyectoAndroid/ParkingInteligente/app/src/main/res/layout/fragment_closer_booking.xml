@@ -30,7 +30,6 @@
     <com.google.android.gms.maps.MapView
         android:id="@+id/mapCloserBooking"
         android:layout_width="match_parent"
-        android:layout_height="231dp"
-        android:apiKey="@string/google_maps_key" />
+        android:layout_height="231dp" />
 
 </LinearLayout>

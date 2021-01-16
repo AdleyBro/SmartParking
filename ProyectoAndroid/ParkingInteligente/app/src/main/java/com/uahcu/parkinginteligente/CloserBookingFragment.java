@@ -18,8 +18,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link CloserBookingFragment#newInstance} factory method to
- * create an instance of this fragment.
  */
 public class CloserBookingFragment extends Fragment implements OnMapReadyCallback {
 
@@ -28,11 +26,6 @@ public class CloserBookingFragment extends Fragment implements OnMapReadyCallbac
 
     public CloserBookingFragment() {
         // Required empty public constructor
-    }
-
-    public static CloserBookingFragment newInstance() {
-        Log.d("BOOKING", "\n\nCLOSER BOOKING FRAGMENT NEW INSTANCE\n\n");
-        return new CloserBookingFragment();
     }
 
     @Override
@@ -64,12 +57,13 @@ public class CloserBookingFragment extends Fragment implements OnMapReadyCallbac
         map.addMarker(new MarkerOptions().position(politecnica).title("Politécnica UAH"));
         map.getUiSettings().setZoomControlsEnabled(true);
         map.moveCamera(CameraUpdateFactory.newLatLng(politecnica));
+        mapView.onResume();
     }
 
     @Override
     public void onResume() {
-        super.onResume();
         mapView.onResume();
+        super.onResume();
     }
 
     @Override
@@ -82,12 +76,6 @@ public class CloserBookingFragment extends Fragment implements OnMapReadyCallbac
     public void onDestroy() {
         super.onDestroy();
         mapView.onDestroy();
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        mapView.onSaveInstanceState(outState);
     }
 
     @Override

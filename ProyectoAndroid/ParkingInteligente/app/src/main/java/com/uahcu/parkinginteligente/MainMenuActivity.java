@@ -9,6 +9,7 @@ import android.view.Menu;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -46,6 +47,11 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+
+        // MAP PLACEHOLDER REPLACEMENT
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.mapPlaceholder, new CloserBookingFragment());
+        ft.commit();
     }
 
     @Override
