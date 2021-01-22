@@ -57,6 +57,7 @@ public class CloserBookingFragment extends Fragment implements OnMapReadyCallbac
         map.addMarker(new MarkerOptions().position(politecnica).title("Politécnica UAH"));
         map.getUiSettings().setZoomControlsEnabled(true);
         map.moveCamera(CameraUpdateFactory.newLatLng(politecnica));
+        map.animateCamera(CameraUpdateFactory.zoomTo(15));
         mapView.onResume();
     }
 

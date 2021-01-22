@@ -49,6 +49,8 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
         NavigationUI.setupWithNavController(navigationView, navController);
 
         // MAP PLACEHOLDER REPLACEMENT
+        // TODO: Si no hay una reserva, que ponga otro fragmento donde indique que debe hacer una
+        //       reserva
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.mapPlaceholder, new CloserBookingFragment());
         ft.commit();
