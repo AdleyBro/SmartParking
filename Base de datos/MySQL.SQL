@@ -1,8 +1,8 @@
 ﻿/*
-Created: 09/01/2021
-Modified: 09/01/2021
-Model: Modelo en MySQL
-Database: MySQL 8.0
+Created: 24/01/2021
+Modified: 24/01/2021
+Model: Modelo de tablas
+Database: MySQL 5.0
 */
 
 -- Create tables section -------------------------------------------------
@@ -11,30 +11,32 @@ Database: MySQL 8.0
 
 CREATE TABLE `Cliente`
 (
-  `Id Usuario` Bigint NOT NULL,
+  `IdUsuario` Bigint NOT NULL,
   `Nombre` Longtext NOT NULL,
   `Email` Longtext NOT NULL,
-  `Teléfono` Bigint NOT NULL,
-  `Nombre de usuario` Longtext NOT NULL
+  `Tlf` Bigint NOT NULL,
+  `FechaDeRegistro` Datetime NOT NULL,
+  `NombreDeUsuario` Varchar(20) NOT NULL
 )
 ;
 
-CREATE INDEX `IX_Tiene` ON `Cliente` (`Nombre de usuario`)
+CREATE INDEX `IX_Tiene` ON `Cliente` (`NombreDeUsuario`)
 ;
 
-ALTER TABLE `Cliente` ADD PRIMARY KEY (`Id Usuario`)
+ALTER TABLE `Cliente` ADD PRIMARY KEY (`IdUsuario`)
 ;
 
 -- Table Usuario
 
 CREATE TABLE `Usuario`
 (
-  `Nombre de usuario` Longtext NOT NULL,
-  `Contraseña` Longtext NOT NULL
+  `NombreDeUsuario` Varchar(20) NOT NULL,
+  `Password` Longtext NOT NULL,
+  `UltimoAccesoParking` Timestamp NOT NULL
 )
 ;
 
-ALTER TABLE `Usuario` ADD PRIMARY KEY (`Nombre de usuario`)
+ALTER TABLE `Usuario` ADD PRIMARY KEY (`NombreDeUsuario`)
 ;
 
 -- Table Tabla de precios
@@ -42,92 +44,93 @@ ALTER TABLE `Usuario` ADD PRIMARY KEY (`Nombre de usuario`)
 CREATE TABLE `Tabla de precios`
 (
   `Hora` Time NOT NULL,
-  `Id parking` Bigint NOT NULL,
-  `Precio` Decimal(10,2) NOT NULL
+  `Precio` Decimal(10,2) NOT NULL,
+  `IdParking` Bigint NOT NULL
 )
 ;
 
-ALTER TABLE `Tabla de precios` ADD PRIMARY KEY (`Hora`, `Id parking`)
+ALTER TABLE `Tabla de precios` ADD PRIMARY KEY (`Hora`,`IdParking`)
 ;
 
 -- Table Parking
 
 CREATE TABLE `Parking`
 (
-  `Id parking` Bigint NOT NULL,
+  `IdParking` Bigint NOT NULL,
   `Ciudad` Longtext NOT NULL,
-  `Dirección` Longtext NOT NULL
+  `Direccion` Longtext NOT NULL,
+  `Coordenadas` Point NOT NULL
 )
 ;
 
-ALTER TABLE `Parking` ADD PRIMARY KEY (`Id parking`)
+ALTER TABLE `Parking` ADD PRIMARY KEY (`IdParking`)
 ;
 
 -- Table Plaza
 
 CREATE TABLE `Plaza`
 (
-  `Id plaza` Bigint NOT NULL,
-  `Id parking` Bigint NOT NULL,
+  `IdPlaza` Bigint NOT NULL,
   `EstaOcupado` Bool NOT NULL,
-  `EsReservable` Bigint NOT NULL
+  `EsReservable` Bool NOT NULL,
+  `IdParking` Bigint NOT NULL
 )
 ;
 
-ALTER TABLE `Plaza` ADD PRIMARY KEY (`Id plaza`, `Id parking`)
+ALTER TABLE `Plaza` ADD PRIMARY KEY (`IdPlaza`,`IdParking`)
 ;
 
 -- Table Historial plazas
 
 CREATE TABLE `Historial plazas`
 (
-  `Fecha hora` Datetime NOT NULL,
-  `Id plaza` Bigint NOT NULL,
-  `Id parking` Bigint NOT NULL,
+  `FechaHoraEntrada` Datetime NOT NULL,
   `EraReservable` Bool NOT NULL,
-  `EstabaOcupado` Bool NOT NULL
+  `FechaHoraSalida` Datetime NOT NULL,
+  `IdPlaza` Bigint NOT NULL,
+  `IdParking` Bigint NOT NULL
 )
 ;
 
-ALTER TABLE `Historial plazas` ADD PRIMARY KEY (`Fecha hora`, `Id plaza`, `Id parking`)
+ALTER TABLE `Historial plazas` ADD PRIMARY KEY (`FechaHoraEntrada`,`IdPlaza`,`IdParking`)
 ;
 
 -- Table Reserva
 
 CREATE TABLE `Reserva`
 (
-  `Fecha hora inicio` Datetime NOT NULL,
-  `Id Usuario` Bigint NOT NULL,
-  `Fecha hora fin` Datetime NOT NULL,
-  `Precio pagado` Decimal(10,2) NOT NULL,
-  `Id plaza` Bigint NOT NULL,
-  `Id parking` Bigint NOT NULL
+  `FechaHoraInicio` Datetime NOT NULL,
+  `FechaHoraFin` Datetime NOT NULL,
+  `PrecioPagado` Decimal(10,2) NOT NULL,
+  `IdUsuario` Bigint NOT NULL,
+  `IdPlaza` Bigint NOT NULL,
+  `IdParking` Bigint NOT NULL
 )
 ;
 
-CREATE INDEX `IX_Reserva2` ON `Reserva` (`Id plaza`, `Id parking`)
+CREATE INDEX `IX_Reserva2` ON `Reserva` (`IdPlaza`,`IdParking`)
 ;
 
-ALTER TABLE `Reserva` ADD PRIMARY KEY (`Fecha hora inicio`, `Id Usuario`)
+ALTER TABLE `Reserva` ADD PRIMARY KEY (`FechaHoraInicio`,`IdUsuario`)
 ;
 
 -- Create foreign keys (relationships) section -------------------------------------------------
 
-ALTER TABLE `Cliente` ADD CONSTRAINT `Tiene` FOREIGN KEY (`Nombre de usuario`) REFERENCES `Usuario` (`Nombre de usuario`) ON DELETE RESTRICT ON UPDATE RESTRICT
+ALTER TABLE `Cliente` ADD CONSTRAINT `Tiene` FOREIGN KEY (`NombreDeUsuario`) REFERENCES `Usuario` (`NombreDeUsuario`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ;
 
-ALTER TABLE `Tabla de precios` ADD CONSTRAINT `Se asocia con` FOREIGN KEY (`Id parking`) REFERENCES `Parking` (`Id parking`) ON DELETE RESTRICT ON UPDATE RESTRICT
+ALTER TABLE `Tabla de precios` ADD CONSTRAINT `Se asocia con` FOREIGN KEY (`IdParking`) REFERENCES `Parking` (`IdParking`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ;
 
-ALTER TABLE `Plaza` ADD CONSTRAINT `Esta compuesto de` FOREIGN KEY (`Id parking`) REFERENCES `Parking` (`Id parking`) ON DELETE RESTRICT ON UPDATE RESTRICT
+ALTER TABLE `Plaza` ADD CONSTRAINT `Esta compuesto de` FOREIGN KEY (`IdParking`) REFERENCES `Parking` (`IdParking`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ;
 
-ALTER TABLE `Historial plazas` ADD CONSTRAINT `Mantiene` FOREIGN KEY (`Id plaza`, `Id parking`) REFERENCES `Plaza` (`Id plaza`, `Id parking`) ON DELETE RESTRICT ON UPDATE RESTRICT
+ALTER TABLE `Historial plazas` ADD CONSTRAINT `Mantiene` FOREIGN KEY (`IdPlaza`, `IdParking`) REFERENCES `Plaza` (`IdPlaza`, `IdParking`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ;
 
-ALTER TABLE `Reserva` ADD CONSTRAINT `Reserva1` FOREIGN KEY (`Id Usuario`) REFERENCES `Cliente` (`Id Usuario`) ON DELETE RESTRICT ON UPDATE RESTRICT
+ALTER TABLE `Reserva` ADD CONSTRAINT `Reserva1` FOREIGN KEY (`IdUsuario`) REFERENCES `Cliente` (`IdUsuario`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ;
 
-ALTER TABLE `Reserva` ADD CONSTRAINT `Reserva2` FOREIGN KEY (`Id plaza`, `Id parking`) REFERENCES `Plaza` (`Id plaza`, `Id parking`) ON DELETE RESTRICT ON UPDATE RESTRICT
+ALTER TABLE `Reserva` ADD CONSTRAINT `Reserva2` FOREIGN KEY (`IdPlaza`, `IdParking`) REFERENCES `Plaza` (`IdPlaza`, `IdParking`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ;
 

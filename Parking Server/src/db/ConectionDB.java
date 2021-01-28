@@ -33,7 +33,7 @@ public class ConectionDB{
     public void closeConnection(Connection con){
 
         try{
-            Log.logdb.info("Cerrando la cone xión. "); 
+            Log.logdb.info("Cerrando la conexión. "); 
             if (con != null){
                 con.close();
             }
