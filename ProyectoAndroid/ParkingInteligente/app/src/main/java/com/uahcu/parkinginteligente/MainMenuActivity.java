@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.Menu;
+import android.view.View;
+import android.widget.TextView;
 
 import com.google.android.material.navigation.NavigationView;
 
@@ -35,6 +37,9 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this); // Listener para detectar los botones del menú desplegable
+        View headerView = navigationView.getHeaderView(0);
+        ((TextView) headerView.findViewById(R.id.navHeaderNombre)).setText(UserInfo.username);
+        ((TextView) headerView.findViewById(R.id.navHeaderEmail)).setText(UserInfo.email);
 
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -47,6 +52,7 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+
 
         // MAP PLACEHOLDER REPLACEMENT
         // TODO: Si no hay una reserva, que ponga otro fragmento donde indique que debe hacer una
