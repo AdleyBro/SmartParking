@@ -1,7 +1,7 @@
-d:\Uni\Computacion ubicua\SmartParking\Parking Server\src\servlets\GetMapa.java
 d:\Uni\Computacion ubicua\SmartParking\Parking Server\src\db\Tabla_de_precios.java
 d:\Uni\Computacion ubicua\SmartParking\Parking Server\src\mqtt\MQTTBroker.java
 d:\Uni\Computacion ubicua\SmartParking\Parking Server\src\db\ConectionDB.java
+d:\Uni\Computacion ubicua\SmartParking\Parking Server\src\servlets\GetMapaParking.java
 d:\Uni\Computacion ubicua\SmartParking\Parking Server\src\servlets\ReservarPlaza.java
 d:\Uni\Computacion ubicua\SmartParking\Parking Server\src\db\Plaza.java
 d:\Uni\Computacion ubicua\SmartParking\Parking Server\src\servlets\InicioSesion.java

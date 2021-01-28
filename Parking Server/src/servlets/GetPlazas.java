@@ -16,61 +16,44 @@ import db.Plaza;
 import logic.*;
 //import logic.Logic;
 
-
-
 @WebServlet("/GetPlazas")
 public class GetPlazas extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-
-
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
-	{
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		Log.log.info("-- Obteniendo plazas de la DB--");
 		response.setContentType("text/html;charset=UTF-8");
 		PrintWriter out = response.getWriter();
-		try 
-		{ 
-           // String nombre = request.getParameter("nombreU");
-           // String pass = request.getParameter("pass");
-           // String email = request.getParameter("email");
-			
-		   int parkingid = Integer.parseInt(request.getParameter("parkingId"));
+		try {
 
-		   ArrayList<Plaza> values =Logic.getPlazaFromDB(parkingid);
-		
-		   String jsonStations = new Gson().toJson(values);
-		   Log.log.info("JSON Values=> {}", jsonStations);
-		   out.println(jsonStations);
-            
-            
-                      
-           
-            
-           //out.println("nombre del abonado : "+nombre+" email: "+email+" pass: "+pass);
-           
-		} catch (NumberFormatException nfe) 
-		{
+			int parkingid = Integer.parseInt(request.getParameter("parkingId"));
+			String fechaI = request.getParameter("fechaI");
+			String fechaF = request.getParameter("fechaF");
+			out.println("Fecha inicio que has puesto: " + fechaI + "\n");
+			out.println("Fecha fin que has puesto: " + fechaF + "\n");
+			ArrayList<Plaza> values = Logic.getPlazaFromDB(parkingid, fechaI, fechaF);
+
+			String jsonPlazas = new Gson().toJson(values);
+			Log.log.info("JSON Values=> {}", jsonPlazas);
+			out.println(jsonPlazas);
+
+		} catch (NumberFormatException nfe) {
 			out.println("-1");
 			Log.log.error("Number Format Exception: {}", nfe);
-		} catch (IndexOutOfBoundsException iobe) 
-		{
+		} catch (IndexOutOfBoundsException iobe) {
 			out.println("-1");
 			Log.log.error("Index out of bounds Exception: {}", iobe);
-		} catch (Exception e) 
-		{
+		} catch (Exception e) {
 			out.println("-1");
 			Log.log.error("Exception: {}", e);
-		} finally 
-		{
+		} finally {
 			out.close();
 		}
 	}
-	
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
-	{
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		doGet(request, response);
 	}
-
-
 }

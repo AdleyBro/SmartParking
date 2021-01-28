@@ -1,24 +1,28 @@
 package db;
-import java.lang.Object;
 
-public class Parking{
-
+public class Parking {
 
     private int id_parking;
     private String ciudad;
     private String direccion;
-    //private double latitud;
-    //private double longitud;
-    private Object coordenadas ; //ver el tipo para coordenadas
+    private Double latitud;
+    private Double longitud;
 
     public Parking() {
+        this.id_parking = 0;
+        this.ciudad = "";
+        this.direccion = "";
+        this.latitud = 0.0;
+        this.longitud = 0.0;
     }
 
-    public Parking(int id_parking, String ciudad, String direccion, Object coordenadas) {
+    public Parking(int id_parking, String ciudad, String direccion, Double latitud, Double longitud) {
         this.id_parking = id_parking;
         this.ciudad = ciudad;
         this.direccion = direccion;
-        this.coordenadas = coordenadas;
+        this.latitud = latitud;
+        this.longitud = longitud;
+
     }
 
     public int getId_parking() {
@@ -45,12 +49,20 @@ public class Parking{
         this.direccion = direccion;
     }
 
-    public Object getCoordenadas() {
-        return this.coordenadas;
+    public double getLatitud() {
+        return this.latitud;
     }
 
-    public void setCoordenadas(Object coordenadas) {
-        this.coordenadas = coordenadas;
+    public void setLatitud(double latitud) {
+        this.latitud = latitud;
+    }
+
+    public double getLongitud() {
+        return this.longitud;
+    }
+
+    public void setLongitud(double longitud) {
+        this.longitud = longitud;
     }
 
 }
