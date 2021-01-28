@@ -44,8 +44,8 @@ public class RegisterFragment extends Fragment {
                 String nombre = nombreT.getText().toString();
                 String email=emailT.getText().toString();
                 String pass= passT.getText().toString();
-                android.os.StrictMode.ThreadPolicy policy = new android.os.StrictMode.ThreadPolicy.Builder().permitAll().build();
 
+                android.os.StrictMode.ThreadPolicy policy = new android.os.StrictMode.ThreadPolicy.Builder().permitAll().build();
                 android.os.StrictMode.setThreadPolicy(policy);
                 registro(nombre,email,pass);
 
@@ -53,13 +53,13 @@ public class RegisterFragment extends Fragment {
                  //       .navigate(R.id.action_RegisterFragment_to_LoginFragment);
             }
         });
-
     }
-    private void registro(String name,String email,String pass)
 
+    // Si el registro se ha completado con éxito, devuelve true. Si no, false.
+    private boolean registro(String name,String email,String pass)
     {
-        String response = "";
-        String urlS= "http://192.168.1.108:8080/Parking2/Registro?nombreU="+name+"&email="+email+"&pass="+pass;
+        String response;
+        String urlS= "http://192.168.1.108:8080/Parking2/Registro?nombreU=" + name + "&email=" + email + "&pass=" + pass;
         try {
             URL url = new URL(urlS);
             HttpURLConnection urlConnection = null;
@@ -71,13 +71,11 @@ public class RegisterFragment extends Fragment {
         }
         catch (IOException e) {
             e.printStackTrace();
-            //return null;
+            return false;
         }
         //return response;
-
-
-
     }
+
     private String convertStreamToString(InputStream is) {
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
         StringBuilder sb = new StringBuilder();
