@@ -37,10 +37,11 @@ public class GetPlazas extends HttpServlet {
 			
 		   int parkingid = Integer.parseInt(request.getParameter("parkingId"));
 
-		   //ArrayList<Plaza> values =Logic.getPlazaFromDB(parkingId);
-		  // String jsonStations = new Gson().toJson(values);
-		   //Log.log.info("JSON Values=> {}", jsonStations);
-		   //out.println(jsonStations);
+		   ArrayList<Plaza> values =Logic.getPlazaFromDB(parkingid);
+		
+		   String jsonStations = new Gson().toJson(values);
+		   Log.log.info("JSON Values=> {}", jsonStations);
+		   out.println(jsonStations);
             
             
                       

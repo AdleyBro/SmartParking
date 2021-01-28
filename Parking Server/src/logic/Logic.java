@@ -21,13 +21,12 @@ public class Logic {
 	public static boolean storeNewUser(String nombre, String pass, Timestamp ts) {
 		ConectionDB conector = new ConectionDB();
 		Connection con = null;
-		FileWriter fw = null;
-		File fd;
+		
 		try {
 
-			fd = new File("D:\\Uni\\Computacion ubicua\\p2\\logs\\log.txt");
+		
 
-			fw = new FileWriter(fd);
+			
 			con = conector.obtainConnection();
 			// Log.log.debug("Database Connected");
 
@@ -41,42 +40,28 @@ public class Logic {
 			return true;
 		} catch (SQLException e) {
 
-			try {
-
-				fw.write("Error en la query "+e.getMessage());
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+			
+		
+		   e.printStackTrace();
+			
             
             //Log.log.error("Error: {}", e);
             return false;
 		} catch (NullPointerException e)
 		{
-            try {
-				fw.write("Error de null pointer "+e.getMessage());
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+            
+			e.printStackTrace();
+			
             return false;
 		} catch (Exception e)
 		{
-			try {
-				fw.write("Error excepcion generica "+e.getMessage());
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+			
+			e.printStackTrace();
+			
             return false;
 		} finally
 		{
-			try {
-				fw.close();;
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				
-			}
+			
 			conector.closeConnection(con);
 		}
 	}
@@ -293,7 +278,8 @@ public class Logic {
 				plaza.setId_parking(rs.getInt("IdParking"));
 				plaza.setId_plaza(rs.getInt("IdPlaza"));
 				plaza.setEsta_ocupado(rs.getBoolean("EstaOcupado"));
-				plaza.setEs_reservable(rs.getBoolean("EsReservable"));
+				plaza.setEsta_ocupado(rs.getObject(1, Boolean.Esta_));
+				plaza.setEs_reservable((boolean)rs.getBoolean("EsReservable"));
 				plazas.add(plaza);
 			}	
 		} catch (SQLException e)
