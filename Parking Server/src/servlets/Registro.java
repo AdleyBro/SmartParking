@@ -59,12 +59,12 @@ public class Registro extends HttpServlet {
             
 			if(ok)
 			{
-				out.println(" La creación del nuevo usuario ha salido bien");
+				out.println("exito");
 
 			}
 			else{
 
-				out.println(" El usuario ya esta registrado\n");
+				out.println("yaexiste");
 			}
 			
             

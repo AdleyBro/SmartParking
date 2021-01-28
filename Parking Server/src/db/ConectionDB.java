@@ -121,7 +121,7 @@ public class ConectionDB{
 
     public static PreparedStatement getPassUsuario(Connection con){
 
-    	return getStatement(con,"SELECT pass FROM usuario WHERE NombreDeUsuario = ?");  	
+    	return getStatement(con,"SELECT password FROM usuario WHERE NombreDeUsuario = ?");  	
     }
     public static PreparedStatement getCountIdCliente(Connection con){
 
