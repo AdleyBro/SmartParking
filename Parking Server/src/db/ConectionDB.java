@@ -136,7 +136,11 @@ public class ConectionDB {
   }
   public static PreparedStatement getPrecioHora(Connection con) {
 
-    return getStatement(con, "SELECT MAX(tablaDePrecios.Hora) as hora, tablaDePrecios.Precio FROM (SELECT * FROM tabla_de_precios WHERE hora < ?) as tablaDePrecios");
+    return getStatement(con, "SELECT precio FROM tabla_de_precios WHERE IdParking=? AND hora IN(SELECT MAX(tablaDePrecios.Hora) as hora FROM (SELECT * FROM tabla_de_precios WHERE IdParking=? AND hora <= ?) as tablaDePrecios)");
+  }
+  public static PreparedStatement setReserva(Connection con) {
+    return getStatement(con,
+        "INSERT INTO reserva (FechaHoraFin,FechaHoraInicio,IdCliente,IdParking,IdPlaza,PrecioPagado) VALUES (?,?,?,?,?,?);");
   }
   /*
    * - Usuarios registrados en ultimo tiempo dado - Cantidad de plazas ocupadas en
@@ -144,6 +148,7 @@ public class ConectionDB {
    * tiempo dado - Cuantas reservas se han realizado en un parking ultimo tiempo
    * dado - Reservas que tiene la plaza en un tiempo dado - Tiempo medio de
    * reserva de una plaza
+   * SELECT precio FROM tabla_de_precios WHERE IdParking=300 AND hora IN(SELECT MAX(tablaDePrecios.Hora) as hora FROM (SELECT * FROM tabla_de_precios WHERE IdParking=300 AND hora <= '20:00:00') as tablaDePrecios)
    **/
 }// SELECT * FROM (SELECT IdPlaza,IdParking FROM plaza where IdParking=300 AND
  // EsReservable=1) as PlazaBien WHERE plazabien.IdPlaza NOT IN (Select Idplaza

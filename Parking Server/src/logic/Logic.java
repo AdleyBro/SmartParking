@@ -343,11 +343,12 @@ public class Logic {
 
 			PreparedStatement ps = ConectionDB.getPrecioHora(con);
 			ps.setInt(1, idparking);
-			ps.setString(2, hora);
+			ps.setInt(2, idparking);
+			ps.setString(3, hora);
 			ResultSet rs = ps.executeQuery();
 
 			rs.next();
-			php = rs.getDouble("precio");
+			php = rs.getDouble("Precio");
 
 			
 		} catch (SQLException e) {
@@ -368,5 +369,39 @@ public class Logic {
 
 		}
 		return php;
+	}
+	public static boolean storeNewReserva(String fechaI, String fechaF, int idcliente, int idparking, int idplaza, double preciopagado) {
+		 ConectionDB conector = new ConectionDB();
+		 Connection con = null;
+		try {
+			con = conector.obtainConnection();
+			// Log.log.debug("Database Connected");
+
+			PreparedStatement ps = ConectionDB.setReserva(con);
+			ps.setString(1, fechaF);
+			ps.setString(2, fechaI);
+			ps.setInt(3, idcliente);
+			ps.setInt(4, idparking);
+			ps.setInt(5, idplaza);
+			ps.setDouble(6, preciopagado);
+
+			// Log.log.info("Query para registrar cliente=> {}", ps.toString());
+			ps.executeUpdate();
+			return true;
+		} catch (SQLException e) {
+			e.getMessage();
+			// Log.log.error("Error: {}", e);
+			return false;
+		} catch (NullPointerException e) {
+			e.getMessage();
+			// Log.log.error("Error: {}", e);
+			return false;
+		} catch (Exception e) {
+			e.getMessage();
+			// Log.log.error("Error:{}", e);
+			return false;
+		} finally {
+			conector.closeConnection(con);
+		}
 	}
 }

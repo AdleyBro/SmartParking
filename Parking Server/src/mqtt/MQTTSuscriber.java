@@ -40,10 +40,10 @@ public class MQTTSuscriber implements MqttCallback {
                 while (rsPlaza.next()) {
                     String topicPlaza = topicParking + "/Plaza" + rsPlaza.getInt("IdPlaza");
                     topics.add(topicPlaza);
-                }
+                } 
 
             }
-            // subscribeTopic(broker, topics);
+            subscribeTopic(broker, topics);
         } catch (Exception ex) {
 
         } finally {
@@ -52,8 +52,21 @@ public class MQTTSuscriber implements MqttCallback {
     }
 
     // se crea un cliente y este se suscribe a todos los topicos
-    public void suscribeTopic(MQTTBroker broker, ArrayList<String> topics){
+    public void subscribeTopic(MQTTBroker broker, ArrayList<String> topics){
+        MemoryPersistence persistence = new MemoryPersistence();
+        try{
+            MqttClient client = new MqttClient(MQTTBroker.getBroker(), MQTTBroker.getClientId(), persistence);
+            MqttConnectOptions connOpts = new MqttConnectOptions();
+            connOpts.setCleanSession(true);	// permite el uso seguro de MemoryPersistence
+            client.connect(connOpts);
+            client.setCallback(this); // Configura al listener para el uso de eventos asincronos.
 
+            for (int i = 0; i < topics.size(); i++){
+                client.subscribe(topics.get(i));
+            }
+        } catch (Exception e){
+
+        }
     }
 
     @Override
@@ -62,13 +75,9 @@ public class MQTTSuscriber implements MqttCallback {
 
     @Override
     public void messageArrived(String topic, MqttMessage message) {
-
-        String[] topics = topic.split("/"); 
         
         if(topic.contains("Sensor")){
-            Logic.setPlazaOcupada(){
-
-            } 
+           // Logic.setPlazaOcupada(); // si nos llega un mensaje del sensor, la plaza se cambiará a libre o a ocupada.            
         } 
 
     }

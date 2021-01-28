@@ -2,6 +2,7 @@ package servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.math.MathContext;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
@@ -35,18 +36,20 @@ public class ReservarPlaza extends HttpServlet {
             String fechaI = request.getParameter("fechaI");
 			String fechaF = request.getParameter("fechaF");
 			idcliente =Logic.getIdCliente(nombreUsuario);
-			
-			double diferenciaEnHoras ; 
-			String hoursI = fechaI.substring(13, 18);
-			String hoursF = fechaF.substring(13, 18);
-			
+			double diferenciaEnHoras= Math.abs((float)((float)(Timestamp.valueOf(fechaF).getTime() - Timestamp.valueOf(fechaI).getTime())/3600000.00)); //2.0-> 2:30 2.0
+			String hoursI = fechaI.substring(10, 18);
+			double precio = diferenciaEnHoras * Logic.getHoraParking(idparking,hoursI) ;
 
-			//double precio = (diferenciaEnHoras) *Logic.getHoraParking(idparking,hoursI ) ;
+			boolean ok= Logic.storeNewReserva(fechaI, fechaF,idcliente, idparking, idplaza, precio);
 			
 			
 			
 			
-			respuesta="Plaza reservada correctamente";
+			if(ok){
+				respuesta="La reserva ha salido bien";
+			}else{
+				respuesta="La reserva ha salido mal";
+			}
                       
            
             out.println(respuesta);
