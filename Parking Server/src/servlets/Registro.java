@@ -54,8 +54,8 @@ public class Registro extends HttpServlet {
 
 			
 
-			ok=Logic.storeNewUser(nombreU,pass,ts);
-			ok2=Logic.storeNewCliente(Idcliente,nombre,email,telefono,fechaDeHoy,nombreU);
+			ok=Logic.storeNewUser(nombre, nombreU, telefono, email,ts);
+			ok2=Logic.storeNewCliente(Idcliente,nombre,email,telefono,pass,fechaDeHoy,nombreU);
             
 			if(ok)
 			{

@@ -14,7 +14,6 @@ import com.google.gson.Gson;
 
 import db.Plaza;
 import logic.*;
-//import logic.Logic;
 
 @WebServlet("/GetPlazas")
 public class GetPlazas extends HttpServlet {
@@ -22,11 +21,9 @@ public class GetPlazas extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		Log.log.info("-- Obteniendo plazas de la DB--");
 		response.setContentType("text/html;charset=UTF-8");
-		PrintWriter out = response.getWriter();
+		   PrintWriter out = response.getWriter();
 		try {
-
 			int parkingid = Integer.parseInt(request.getParameter("parkingId"));
 			String fechaI = request.getParameter("fechaI");
 			String fechaF = request.getParameter("fechaF");
@@ -35,18 +32,12 @@ public class GetPlazas extends HttpServlet {
 			ArrayList<Plaza> values = Logic.getPlazaFromDB(parkingid, fechaI, fechaF);
 
 			String jsonPlazas = new Gson().toJson(values);
-			Log.log.info("JSON Values=> {}", jsonPlazas);
 			out.println(jsonPlazas);
 
 		} catch (NumberFormatException nfe) {
 			out.println("-1");
-			Log.log.error("Number Format Exception: {}", nfe);
 		} catch (IndexOutOfBoundsException iobe) {
-			out.println("-1");
-			Log.log.error("Index out of bounds Exception: {}", iobe);
 		} catch (Exception e) {
-			out.println("-1");
-			Log.log.error("Exception: {}", e);
 		} finally {
 			out.close();
 		}

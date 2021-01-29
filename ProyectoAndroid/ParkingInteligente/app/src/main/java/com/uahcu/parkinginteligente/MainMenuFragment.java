@@ -5,8 +5,8 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -43,34 +43,22 @@ public class MainMenuFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        view.findViewById(R.id.buttonMapaParkings).setOnTouchListener(new View.OnTouchListener() {
+        view.findViewById(R.id.buttonReservar).setOnTouchListener(new View.OnTouchListener() {
               @Override
               public boolean onTouch(View v, MotionEvent event) {
-                  ImageButton button = (ImageButton) v;
+              ImageButton button = (ImageButton) v;
 
-                  // TODO: Código para abrir fragment con google maps y parkings cercanos
-
-                  if (event.getAction() == MotionEvent.ACTION_DOWN)
-                      button.setColorFilter(getResources().getColor(R.color.colorPrimary, null), PorterDuff.Mode.SRC_ATOP);
-                  else if (event.getAction() == MotionEvent.ACTION_UP)
-                      button.setColorFilter(getResources().getColor(R.color.colorSecondary, null), PorterDuff.Mode.SRC_ATOP);
-                  return true;
+              if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                  button.setColorFilter(getResources().getColor(R.color.colorPrimary, null), PorterDuff.Mode.SRC_ATOP);
               }
-          }
-        );
+              else if (event.getAction() == MotionEvent.ACTION_UP) {
+                  button.setColorFilter(getResources().getColor(R.color.colorSecondary, null), PorterDuff.Mode.SRC_ATOP);
 
-        view.findViewById(R.id.buttonEstadoReserva).setOnTouchListener(new View.OnTouchListener() {
-              @Override
-              public boolean onTouch(View v, MotionEvent event) {
-                  ImageButton button = (ImageButton) v;
+                  NavHostFragment.findNavController(MainMenuFragment.this)
+                          .navigate(R.id.action_mainMenuFragment_to_bookingFragment);
+              }
 
-                  // TODO: Código para abrir fragment con de reserva de plaza
-
-                  if (event.getAction() == MotionEvent.ACTION_DOWN)
-                      button.setColorFilter(getResources().getColor(R.color.colorPrimary, null), PorterDuff.Mode.SRC_ATOP);
-                  else if (event.getAction() == MotionEvent.ACTION_UP)
-                      button.setColorFilter(getResources().getColor(R.color.colorSecondary, null), PorterDuff.Mode.SRC_ATOP);
-                  return true;
+              return true;
               }
           }
         );

@@ -17,6 +17,15 @@
     <fragment
         android:id="@+id/bookingFragment"
         android:name="com.uahcu.parkinginteligente.BookingFragment"
-        android:label="fragment_booking"
-        tools:layout="@layout/fragment_booking" />
+        android:label="fragment_real_booking"
+        tools:layout="@layout/fragment_booking" >
+        <action
+            android:id="@+id/action_bookingFragment_to_bookParkingSlotFragment"
+            app:destination="@id/bookParkingSlotFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/bookParkingSlotFragment"
+        android:name="com.uahcu.parkinginteligente.BookParkingSlotFragment"
+        android:label="fragment_book_parking_slot"
+        tools:layout="@layout/fragment_book_parking_slot" />
 </navigation>

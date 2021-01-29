@@ -14,6 +14,8 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.uahcu.parkinginteligente.conexion.ConnectionHandler;
 
+import java.util.ArrayList;
+
 public class LoginFragment extends Fragment {
 
     @Override
@@ -43,11 +45,15 @@ public class LoginFragment extends Fragment {
                     ConnectionHandler.loginRequest(nombreUsuario, pass);
                     ConnectionHandler.waitForResponse();
 
-                    String respuesta = ConnectionHandler.response;
+                    String respuesta = ConnectionHandler.getSimpleResponse();
                     System.out.println("Respuesta: " + respuesta);
                     if (respuesta.contains("correcto")) {
-                        //DatosUsuario.email = email; //TODO: Hay que hacer un servlet para sacar el email :D
-                        UserInfo.username = nombreUsuario;
+                        ConnectionHandler.userDataRequest(nombreUsuario);
+                        ConnectionHandler.waitForResponse();
+                        ArrayList<String> userData = ConnectionHandler.getFullResponse();
+                        UserInfo.setDataFromArray(userData);
+
+
 
                         // Con el intent cambiamos a otra actividad que contiene el menú desplegable
                         Intent intent = new Intent(view.getContext(), MainMenuActivity.class);

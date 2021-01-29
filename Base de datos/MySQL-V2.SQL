@@ -15,6 +15,7 @@ CREATE TABLE `Cliente`
   `Nombre` Longtext NOT NULL,
   `Email` Longtext NOT NULL,
   `Tlf` Bigint NOT NULL,
+  `Password` Longtext NOT NULL,
   `FechaDeRegistro` Datetime NOT NULL,
   `NombreDeUsuario` Varchar(20) NOT NULL
 )
@@ -30,8 +31,10 @@ ALTER TABLE `Cliente` ADD PRIMARY KEY (`IdCliente`)
 
 CREATE TABLE `Usuario`
 (
+  `Nombre` Varchar(30) NOT NULL,  
   `NombreDeUsuario` Varchar(20) NOT NULL,
-  `Password` Longtext NOT NULL,
+  `Telefono` Bigint NOT NULL,
+  `Email` Longtext NOT NULL,
   `UltimoAccesoParking` Timestamp NOT NULL
 )
 ;

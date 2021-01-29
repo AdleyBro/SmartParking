@@ -14,6 +14,8 @@ import androidx.fragment.app.Fragment;
 
 import com.uahcu.parkinginteligente.conexion.ConnectionHandler;
 
+import java.util.ArrayList;
+
 public class RegisterFragment extends Fragment {
 
     @Override
@@ -52,11 +54,13 @@ public class RegisterFragment extends Fragment {
                     if (contra1.equals(contra2)) {
                         ConnectionHandler.registerRequest(nombre, nombreUsuario, telefono, email, contra1);
                         ConnectionHandler.waitForResponse();
-                        String respuesta = ConnectionHandler.response;
+                        String respuesta = ConnectionHandler.getSimpleResponse();
                         System.out.println("Respuesta: " + respuesta);
                         if (respuesta.contains("bien")) {
-                            UserInfo.email = email;
-                            UserInfo.username = nombreUsuario;
+                            ConnectionHandler.userDataRequest(nombreUsuario);
+                            ConnectionHandler.waitForResponse();
+                            ArrayList<String> userData = ConnectionHandler.getFullResponse();
+                            UserInfo.setDataFromArray(userData);
 
                             // Con el intent cambiamos a otra actividad que contiene el menú desplegable
                             Intent intent = new Intent(view.getContext(), MainMenuActivity.class);

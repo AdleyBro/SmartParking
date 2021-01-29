@@ -6,7 +6,6 @@ import java.util.Calendar;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import logic.Log;
 import javax.naming.NamingException;
 
 public class ConectionDB {
@@ -23,9 +22,7 @@ public class ConectionDB {
       con = DriverManager.getConnection("jdbc:mysql://localhost:3306/" + nombreBBDD, usuario, password);
       Calendar calendar = Calendar.getInstance();
       Date date = new Date(calendar.getTime().getTime());
-      Log.logdb.debug("Conexión creada, DB Id: %i fecha de obtención: %s ", con.toString(), date.toString());
     } catch (SQLException sqlException) {
-      Log.logdb.error("ERROR sql obteniendo la conexión: " + sqlException);
     }
     return con;
   }
@@ -33,13 +30,11 @@ public class ConectionDB {
   public void closeConnection(Connection con) {
 
     try {
-      Log.logdb.info("Cerrando la conexión. ");
       if (con != null) {
         con.close();
       }
 
     } catch (SQLException sqlException) {
-      Log.logdb.error("ERROR sql cerrando la conexión: " + sqlException);
     }
 
   }
@@ -48,9 +43,7 @@ public class ConectionDB {
 
     try {
       con.commit();
-      Log.logdb.debug("Transaction closed");
     } catch (SQLException sqlException) {
-      Log.logdb.error("Error closing the transaction: " + sqlException);
     }
 
   }
@@ -59,9 +52,7 @@ public class ConectionDB {
 
     try {
       con.rollback();
-      Log.logdb.debug("Transaction canceled");
     } catch (SQLException sqlException) {
-      Log.logdb.error("ERROR sql when canceling the transation: " + sqlException);
     }
 
   }
@@ -73,13 +64,13 @@ public class ConectionDB {
         ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
       }
     } catch (SQLException sqlException) {
-      Log.logdb.warn("ERROR sql creating PreparedStatement:{} " + sqlException);
     }
 
     return ps;
   }
 
   // Llamadas a la Base de Datos
+ 
   public static PreparedStatement getParking(Connection con) {
 
     return getStatement(con, "SELECT * FROM parking ");
@@ -90,16 +81,20 @@ public class ConectionDB {
     return getStatement(con,
         "SELECT * FROM (SELECT * FROM plaza where IdParking=? AND EsReservable=1) as PlazaBien WHERE plazabien.IdPlaza NOT IN (Select Idplaza FROM reserva WHERE IdParking=? AND ((FechaHoraInicio BETWEEN ?  AND ? ) OR (FechaHoraFin BETWEEN ?  AND ?)))");
   }
+  public static PreparedStatement getPlazasParkingMosquitto(Connection con) {
 
+    return getStatement(con,
+        "SELECT * FROM (SELECT * FROM plaza WHERE IdParking=?))");
+  }
   public static PreparedStatement getCountPlazasParking(Connection con) {
 
     return getStatement(con,
         "SELECT COUNT(IdPlaza) AS nPlazasOcupadas FROM plaza WHERE IdParking=? AND EstaOcupado like '0'");
   }
 
-  public static PreparedStatement updatePlazas(Connection con) {
+  public static PreparedStatement updateEstadoPlazas(Connection con) {
 
-    return getStatement(con, "UPDATE usuario SET UltimoAccesoParking = ? WHERE NombreDeUsuario = ?;");
+    return getStatement(con, "UPDATE plazas SET EstaOcupado=? WHERE IdParking=? AND IdPlaza=? ");
   }
 
   public static PreparedStatement getCountUsuario(Connection con) {
@@ -108,12 +103,16 @@ public class ConectionDB {
   }
 
   public static PreparedStatement setUsuario(Connection con) {
-    return getStatement(con, "INSERT INTO usuario (NombreDeUsuario,Password,UltimoAccesoParking) VALUES (?,?,?);");
+    return getStatement(con, "INSERT INTO usuario (Nombre,NombreDeUsuario,Telefono,Email,UltimoAccesoParking) VALUES (?,?,?,?,?);");
+  }
+
+  public static PreparedStatement getCliente(Connection con) {
+    return getStatement(con, "SELECT * FROM cliente WHERE NombreDeUsuario=?");
   }
 
   public static PreparedStatement setCliente(Connection con) {
     return getStatement(con,
-        "INSERT INTO cliente (IdCliente,Nombre,Email,Tlf,FechaDeRegistro,NombreDeUsuario) VALUES (?,?,?,?,?,?);");
+        "INSERT INTO cliente (IdCliente,Nombre,Email,Tlf,Password,FechaDeRegistro,NombreDeUsuario) VALUES (?,?,?,?,?,?,?);");
   }
 
   public static PreparedStatement updateUsuarioTS(Connection con) {
@@ -123,7 +122,7 @@ public class ConectionDB {
 
   public static PreparedStatement getPassUsuario(Connection con) {
 
-    return getStatement(con, "SELECT Password FROM usuario WHERE NombreDeUsuario=?");
+    return getStatement(con, "SELECT Password FROM cliente WHERE NombreDeUsuario=?");
   }
 
   public static PreparedStatement getCountIdCliente(Connection con) {
@@ -136,7 +135,19 @@ public class ConectionDB {
   }
   public static PreparedStatement getPrecioHora(Connection con) {
 
-    return getStatement(con, "SELECT MAX(tablaDePrecios.Hora) as hora, tablaDePrecios.Precio FROM (SELECT * FROM tabla_de_precios WHERE hora < ?) as tablaDePrecios");
+    return getStatement(con, "SELECT precio FROM tabla_de_precios WHERE IdParking=? AND hora IN(SELECT MAX(tablaDePrecios.Hora) as hora FROM (SELECT * FROM tabla_de_precios WHERE IdParking=? AND hora <= ?) as tablaDePrecios)");
+  }
+  public static PreparedStatement setReserva(Connection con) {
+    return getStatement(con,
+        "INSERT INTO reserva (FechaHoraFin,FechaHoraInicio,IdCliente,IdParking,IdPlaza,PrecioPagado) VALUES (?,?,?,?,?,?);");
+  }
+
+  public static PreparedStatement getReservaProxima(Connection con) {
+    return getStatement(con, "SELECT * FROM reserva WHERE IdCliente=? AND FechaHoraInicio>LOCALTIMESTAMP");
+  }
+  
+  public static PreparedStatement getLatLongParking(Connection con) {
+    return getStatement(con, "SELECT Latitud, Longitud FROM parking WHERE IdParking=?");
   }
   /*
    * - Usuarios registrados en ultimo tiempo dado - Cantidad de plazas ocupadas en
@@ -144,6 +155,7 @@ public class ConectionDB {
    * tiempo dado - Cuantas reservas se han realizado en un parking ultimo tiempo
    * dado - Reservas que tiene la plaza en un tiempo dado - Tiempo medio de
    * reserva de una plaza
+   * SELECT precio FROM tabla_de_precios WHERE IdParking=300 AND hora IN(SELECT MAX(tablaDePrecios.Hora) as hora FROM (SELECT * FROM tabla_de_precios WHERE IdParking=300 AND hora <= '20:00:00') as tablaDePrecios)
    **/
 }// SELECT * FROM (SELECT IdPlaza,IdParking FROM plaza where IdParking=300 AND
  // EsReservable=1) as PlazaBien WHERE plazabien.IdPlaza NOT IN (Select Idplaza

@@ -3,6 +3,7 @@ package servlets;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,7 +15,6 @@ import com.google.gson.Gson;
 
 import db.Parking;
 import logic.*;
-//import logic.Logic;
 
 @WebServlet("/GetMapaParking")
 public class GetMapaParking extends HttpServlet {
@@ -22,24 +22,25 @@ public class GetMapaParking extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		Log.log.info("-- Obteniendo mapa--");
+
 		response.setContentType("text/html;charset=UTF-8");
 		PrintWriter out = response.getWriter();
 		try {
+			String respuesta = "";
 			ArrayList<Parking> values = Logic.getParkingFromDB();
 
-			String jsonParkings = new Gson().toJson(values);
-			Log.log.info("JSON Values=> {}", jsonParkings);
-			out.println(jsonParkings);
-		} catch (NumberFormatException nfe) {
-			out.println("-1");
-			Log.log.error("Number Format Exception: {}", nfe);
-		} catch (IndexOutOfBoundsException iobe) {
-			out.println("-1");
-			Log.log.error("Index out of bounds Exception: {}", iobe);
+			Iterator<Parking> iterator = values.iterator();
+			while (iterator.hasNext()) {
+				Parking temp = iterator.next();
+				respuesta += temp.getId_parking() + "#" + temp.getCiudad() + "#" + temp.getDireccion()
+							 + "#" + temp.getLatitud() + "#" + temp.getLongitud();
+				respuesta += "_";
+			}
+			respuesta = respuesta.substring(0, respuesta.length() - 1); 
+
+			out.println(respuesta);
 		} catch (Exception e) {
 			out.println("-1");
-			Log.log.error("Exception: {}", e);
 		} finally {
 			out.close();
 		}

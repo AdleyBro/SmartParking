@@ -2,7 +2,7 @@ package db;
 
 public class Reserva{
 
-    private int id_usuario;
+    private int id_cliente;
     private String fecha_hora_inicio;
     private String fecha_hora_fin;
     private float precio_pagado;
@@ -10,8 +10,8 @@ public class Reserva{
     private String id_parking_FK;
 
 
-    public Reserva(int id_usuario, String fecha_hora_inicio, String fecha_hora_fin, float precio_pagado, String id_plaza_FK, String id_parking_FK) {
-        this.id_usuario = id_usuario;
+    public Reserva(int id_Cliente, String fecha_hora_inicio, String fecha_hora_fin, float precio_pagado, String id_plaza_FK, String id_parking_FK) {
+        this.id_cliente = id_Cliente;
         this.fecha_hora_inicio = fecha_hora_inicio;
         this.fecha_hora_fin = fecha_hora_fin;
         this.precio_pagado = precio_pagado;
@@ -19,12 +19,12 @@ public class Reserva{
         this.id_parking_FK = id_parking_FK;
     }
 
-    public int getId_usuario() {
-        return this.id_usuario;
+    public int getId_Cliente() {
+        return this.id_cliente;
     }
 
-    public void setId_usuario(int id_usuario) {
-        this.id_usuario = id_usuario;
+    public void setId_Cliente(int id_cliente) {
+        this.id_cliente = id_cliente;
     }
 
     public String getFecha_hora_inicio() {
@@ -65,11 +65,6 @@ public class Reserva{
 
     public void setId_parking_FK(String id_parking_FK) {
         this.id_parking_FK = id_parking_FK;
-    }
-
-    public Reserva id_usuario(int id_usuario) {
-        setId_usuario(id_usuario);
-        return this;
     }
 
     public Reserva fecha_hora_inicio(String fecha_hora_inicio) {

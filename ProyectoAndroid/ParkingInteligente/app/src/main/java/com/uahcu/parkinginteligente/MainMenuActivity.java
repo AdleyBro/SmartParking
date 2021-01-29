@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.google.android.material.navigation.NavigationView;
+import com.uahcu.parkinginteligente.conexion.ConnectionHandler;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentTransaction;
@@ -19,6 +20,8 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
+import java.util.ArrayList;
 
 public class MainMenuActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -38,8 +41,8 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this); // Listener para detectar los botones del menú desplegable
         View headerView = navigationView.getHeaderView(0);
-        ((TextView) headerView.findViewById(R.id.navHeaderNombre)).setText(UserInfo.username);
-        ((TextView) headerView.findViewById(R.id.navHeaderEmail)).setText(UserInfo.email);
+        ((TextView) headerView.findViewById(R.id.navHeaderNombre)).setText(UserInfo.getNombreUsuario());
+        ((TextView) headerView.findViewById(R.id.navHeaderEmail)).setText(UserInfo.getEmail());
 
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -53,12 +56,19 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
-
-        // MAP PLACEHOLDER REPLACEMENT
-        // TODO: Si no hay una reserva, que ponga otro fragmento donde indique que debe hacer una
-        //       reserva
+        ConnectionHandler.closestBookingRequest(UserInfo.getId());
+        try {
+            ConnectionHandler.waitForResponse();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        ArrayList<String> respuesta = ConnectionHandler.getFullResponse();
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.mapPlaceholder, new CloserBookingFragment());
+        if (respuesta.size() > 2) {
+            ft.replace(R.id.mapPlaceholder, new CloserBookingFragment(respuesta));
+        } else {
+            ft.replace(R.id.mapPlaceholder, new NoParkingSlotFragment());
+        }
         ft.commit();
     }
 
@@ -79,10 +89,8 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
     @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-        Log.d("ALGO", "SI QUE DETECTOOOO");
         switch(menuItem.getItemId()) {
             case R.id.nav_cerrar_sesion:
-                Log.d("HEY", "COOOO");
                 getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
                         new RegisterFragment()).commit();
                 break;
