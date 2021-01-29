@@ -1,8 +1,10 @@
 package com.uahcu.parkinginteligente.conexion;
 
 import com.google.gson.Gson;
+import com.uahcu.parkinginteligente.BookingInfo;
 import com.uahcu.parkinginteligente.MainActivity;
 import com.uahcu.parkinginteligente.Parking;
+import com.uahcu.parkinginteligente.UserInfo;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -66,6 +68,15 @@ public class ConnectionHandler {
             @Override
             public void run() {
                 doParkingMapRequest();
+            }
+        });
+    }
+
+    public static void bookParkingSlotRequest() {
+        MainActivity.executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+                doBookParkingSlotRequest();
             }
         });
     }
@@ -144,6 +155,23 @@ public class ConnectionHandler {
             connection.connect();
             InputStream in = connection.getInputStream();
             parkingList = convertToParkingMap(in);
+            latch.countDown();
+            connection.disconnect();
+        } catch (IOException e) {
+            e.printStackTrace();
+            latch.countDown();
+        }
+    }
+
+    private static void doBookParkingSlotRequest() {
+        try {
+            String urlS = web + "/Parking Server/ReservarPlaza?idpark=" + BookingInfo.parking.getId_parking() +
+                    "nombreU=" + UserInfo.getNombreUsuario() + "fechaI=" + BookingInfo.fechaHoraIni + "fechaF=" + BookingInfo.fechaHoraFin;
+            URL url = new URL(urlS);
+            HttpURLConnection connection = createConnection(url, "POST");
+            connection.connect();
+            InputStream in = connection.getInputStream();
+            response = convertStreamToArrayList(in);
             latch.countDown();
             connection.disconnect();
         } catch (IOException e) {

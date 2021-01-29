@@ -8,6 +8,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -18,6 +19,9 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.uahcu.parkinginteligente.conexion.ConnectionHandler;
 
+import java.sql.Date;
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -106,7 +110,17 @@ public class BookingFragment extends Fragment implements OnMapReadyCallback, Goo
 
     @Override
     public boolean onMarkerClick(Marker marker) {
+        /*
+        String fechaIni = (String) ((TextView) mapView.findViewById(R.id.editTextDate)).getText();
+        String fechaFin = (String) ((TextView) mapView.findViewById(R.id.editTextDate2)).getText();
+        String horaIni = (String) ((TextView) mapView.findViewById(R.id.editTextTime)).getText();
+        String horaFin = (String) ((TextView) mapView.findViewById(R.id.editTextTime2)).getText();
+        */
+
         Parking parking = parkingMarkers.get(marker);
+        BookingInfo.parking = parking;
+        //BookingInfo.fechaHoraIni = fechaIni + horaIni;
+        //BookingInfo.fechaHoraFin = fechaFin + horaFin;
 
         if (parking != null) {
             NavHostFragment.findNavController(BookingFragment.this)

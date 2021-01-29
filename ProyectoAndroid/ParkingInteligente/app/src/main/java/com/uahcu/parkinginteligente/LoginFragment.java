@@ -53,8 +53,6 @@ public class LoginFragment extends Fragment {
                         ArrayList<String> userData = ConnectionHandler.getFullResponse();
                         UserInfo.setDataFromArray(userData);
 
-
-
                         // Con el intent cambiamos a otra actividad que contiene el menú desplegable
                         Intent intent = new Intent(view.getContext(), MainMenuActivity.class);
                         startActivityForResult(intent, 0);
