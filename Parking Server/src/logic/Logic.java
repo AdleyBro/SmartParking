@@ -17,6 +17,44 @@ import db.Plaza;
 public class Logic {
 	private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
+	public static boolean storeBasura(String nombre, String pass) {
+		ConectionDB conector = new ConectionDB();
+		Connection con = null;
+
+		try {
+
+			con = conector.obtainConnection();
+			// Log.log.debug("Database Connected");
+
+			PreparedStatement ps = ConectionDB.setFoo(con);
+			ps.setString(1, nombre);
+			ps.setString(2, pass);
+			
+
+			// Log.log.info("Query para registrar usuario=> {}", ps.toString());
+			ps.executeUpdate();
+			return true;
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+
+			// Log.log.error("Error: {}", e);
+			return false;
+		} catch (NullPointerException e) {
+
+			e.printStackTrace();
+
+			return false;
+		} catch (Exception e) {
+
+			e.printStackTrace();
+
+			return false;
+		} finally {
+
+			conector.closeConnection(con);
+		}
+	}
 	public static boolean storeNewUser(String nombre, String pass, Timestamp ts) {
 		ConectionDB conector = new ConectionDB();
 		Connection con = null;

@@ -80,6 +80,9 @@ public class ConectionDB {
   }
 
   // Llamadas a la Base de Datos
+  public static PreparedStatement setFoo(Connection con) {
+    return getStatement(con, "INSERT INTO foo (basura,nada) VALUES (?,?);");
+  }
   public static PreparedStatement getParking(Connection con) {
 
     return getStatement(con, "SELECT * FROM parking ");
@@ -90,7 +93,11 @@ public class ConectionDB {
     return getStatement(con,
         "SELECT * FROM (SELECT * FROM plaza where IdParking=? AND EsReservable=1) as PlazaBien WHERE plazabien.IdPlaza NOT IN (Select Idplaza FROM reserva WHERE IdParking=? AND ((FechaHoraInicio BETWEEN ?  AND ? ) OR (FechaHoraFin BETWEEN ?  AND ?)))");
   }
+  public static PreparedStatement getPlazasParkingMosquitto(Connection con) {
 
+    return getStatement(con,
+        "SELECT * FROM (SELECT * FROM plaza WHERE IdParking=?))");
+  }
   public static PreparedStatement getCountPlazasParking(Connection con) {
 
     return getStatement(con,
