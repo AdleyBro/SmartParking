@@ -21,7 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="64dp"
             android:gravity="bottom"
-            android:paddingLeft="16dp"
+            android:paddingStart="16dp"
             android:text="@string/estado_actual_reserva"
             android:textAlignment="textStart"
             android:textColor="@color/colorSecondary"
@@ -39,7 +39,7 @@
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="fill_parent"
-        android:layout_height="180dp"
+        android:layout_height="140dp"
         android:baselineAligned="false"
         android:gravity="fill_horizontal"
         android:orientation="horizontal"
@@ -48,44 +48,16 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <LinearLayout
-            android:layout_width="160dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
             android:layout_weight="1"
             android:orientation="vertical">
 
             <ImageButton
-                android:id="@+id/buttonMapaParkings"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_gravity="center"
-                android:background="@color/background"
-                android:scaleType="fitCenter"
-                android:scaleX="1"
-                android:scaleY="1"
-                android:src="@drawable/mapaicono"
-                android:tint="@color/colorSecondary" />
-
-            <TextView
-                android:id="@+id/textoMapaParkings"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:text="@string/ver_mapa_parkings"
-                android:textAlignment="center"
-                android:textColor="@color/colorSecondary"
-                android:textSize="18sp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="160dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <ImageButton
-                android:id="@+id/buttonEstadoReserva"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:id="@+id/buttonReservar"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:layout_gravity="center"
                 android:background="@color/background"
                 android:scaleType="fitCenter"
@@ -98,10 +70,10 @@
                 android:id="@+id/textoEstadoReserva"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="@string/ver_estado_reserva"
+                android:text="@string/reservar_plaza"
                 android:textAlignment="center"
                 android:textColor="@color/colorSecondary"
-                android:textSize="18sp" />
+                android:textSize="14sp" />
         </LinearLayout>
 
     </LinearLayout>

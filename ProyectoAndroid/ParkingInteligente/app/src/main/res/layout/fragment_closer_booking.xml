@@ -8,11 +8,11 @@
     tools:context=".CloserBookingFragment" >
 
     <TextView
-        android:id="@+id/text_booking_date_time"
+        android:id="@+id/textBookingTime"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:gravity="center_vertical"
-        android:paddingStart="20dp"
+        android:paddingStart="16dp"
         android:text="Fecha y hora:"
         android:textColor="@color/colorSecondary"
         android:textSize="24sp" />
@@ -22,7 +22,7 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:gravity="center_vertical"
-        android:paddingStart="20dp"
+        android:paddingStart="16dp"
         android:text="@string/localizacion"
         android:textColor="@color/colorSecondary"
         android:textSize="24sp" />
@@ -30,6 +30,6 @@
     <com.google.android.gms.maps.MapView
         android:id="@+id/mapCloserBooking"
         android:layout_width="match_parent"
-        android:layout_height="231dp" />
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

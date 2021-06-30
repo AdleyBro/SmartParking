@@ -9,5 +9,32 @@
         android:id="@+id/mainMenuFragment"
         android:name="com.uahcu.parkinginteligente.MainMenuFragment"
         android:label="fragment_main_menu"
-        tools:layout="@layout/fragment_main_menu" />
+        tools:layout="@layout/fragment_main_menu" >
+        <action
+            android:id="@+id/action_mainMenuFragment_to_bookingFragment"
+            app:destination="@id/bookingFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/bookingFragment"
+        android:name="com.uahcu.parkinginteligente.BookingFragment"
+        android:label="fragment_real_booking"
+        tools:layout="@layout/fragment_booking" >
+        <action
+            android:id="@+id/action_bookingFragment_to_bookParkingSlotFragment"
+            app:destination="@id/bookParkingSlotFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/bookParkingSlotFragment"
+        android:name="com.uahcu.parkinginteligente.BookParkingSlotFragment"
+        android:label="fragment_book_parking_slot"
+        tools:layout="@layout/fragment_book_parking_slot" >
+        <action
+            android:id="@+id/action_bookParkingSlotFragment_to_exitoEnReserva"
+            app:destination="@id/exitoEnReserva" />
+    </fragment>
+    <fragment
+        android:id="@+id/exitoEnReserva"
+        android:name="com.uahcu.parkinginteligente.ExitoEnReserva"
+        android:label="fragment_exito_en_reserva"
+        tools:layout="@layout/fragment_exito_en_reserva" />
 </navigation>

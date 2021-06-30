@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -16,6 +17,8 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.ArrayList;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -23,14 +26,16 @@ public class CloserBookingFragment extends Fragment implements OnMapReadyCallbac
 
     private MapView mapView;
     private GoogleMap map;
+    private ArrayList<String> respuesta;
 
-    public CloserBookingFragment() {
-        // Required empty public constructor
+    public CloserBookingFragment() {}
+
+    public CloserBookingFragment(ArrayList<String> respuesta) {
+        this.respuesta = respuesta;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Log.d("BOOKING", "\n\nCLOSER BOOKING FRAGMENT ON CREATE\n\n");
         super.onCreate(savedInstanceState);
     }
 
@@ -40,7 +45,9 @@ public class CloserBookingFragment extends Fragment implements OnMapReadyCallbac
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_closer_booking, container, false);
 
-        Log.d("BOOKING", "\n\nCLOSER BOOKING FRAGMENT\n\n");
+        TextView fechaHora = v.findViewById(R.id.textBookingTime);
+        fechaHora.setText(String.format("Fecha y hora: %s", respuesta.get(2)));
+
         mapView = v.findViewById(R.id.mapCloserBooking);
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
@@ -50,13 +57,12 @@ public class CloserBookingFragment extends Fragment implements OnMapReadyCallbac
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        Log.d("MAPSSSS", "ON MAP READYYYYYYYYYYYY");
         map = googleMap;
 
-        LatLng politecnica = new LatLng(40.51359575932808, -3.348685715796535);
-        map.addMarker(new MarkerOptions().position(politecnica).title("Politécnica UAH"));
+        LatLng parking = new LatLng(Double.parseDouble(respuesta.get(6)), Double.parseDouble(respuesta.get(7)));
+        map.addMarker(new MarkerOptions().position(parking).title("Plaza reservada"));
         map.getUiSettings().setZoomControlsEnabled(true);
-        map.moveCamera(CameraUpdateFactory.newLatLng(politecnica));
+        map.animateCamera(CameraUpdateFactory.newLatLngZoom(parking, 15));
         mapView.onResume();
     }
 

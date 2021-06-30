@@ -1,22 +1,21 @@
 package com.uahcu.parkinginteligente;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import com.uahcu.parkinginteligente.conexion.ConnectionHandler;
+
+import java.util.ArrayList;
 
 public class RegisterFragment extends Fragment {
 
@@ -31,79 +30,61 @@ public class RegisterFragment extends Fragment {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        final EditText nombreUT = (EditText) view.findViewById(R.id.editTextTextPersonName);
-        final EditText passT = (EditText) view.findViewById(R.id.editTextTextPassword2);
-        final EditText emailT = (EditText) view.findViewById(R.id.editTextTextEmailAddress2);
-        final EditText nombreT = (EditText) view.findViewById(R.id.rellenableNombre);
-        final EditText telefonoT = (EditText) view.findViewById(R.id.rellenableDeTelefono);
-        Button btnRegistro = (Button) view.findViewById(R.id.button_crear_cuenta_nueva);
+
+        final EditText ETnombre = view.findViewById(R.id.textNombre);
+        final EditText ETnombreUsuario = view.findViewById(R.id.textNombreUsuario);
+        final EditText ETtelefono = view.findViewById(R.id.textTelefono);
+        final EditText ETemail = view.findViewById(R.id.textEmail);
+        final EditText ETcontra1 = view.findViewById(R.id.textContrasena);
+        final EditText ETcontra2 = view.findViewById(R.id.textContrasena2);
+
+        final TextView textAviso = view.findViewById(R.id.textAviso);
+
+        Button btnRegistro = view.findViewById(R.id.buttonCrearCuenta);
         btnRegistro.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: Codigo para crear una cuenta habiendo metido los datos en las cajitas
-                // Una vez creada, debería ir al menú principal logeado en su cuenta
-                String nombreU = nombreUT.getText().toString();
-                String email=emailT.getText().toString();
-                String pass= passT.getText().toString();
-                String nombre = nombreT.getText().toString();
-                int telefono = Integer.parseInt(telefonoT.getText().toString());
+                try {
+                    String nombre = ETnombre.getText().toString();
+                    String nombreUsuario = ETnombreUsuario.getText().toString();
+                    String telefono = ETtelefono.getText().toString();
+                    String email = ETemail.getText().toString();
+                    String contra1 = ETcontra1.getText().toString();
+                    String contra2 = ETcontra2.getText().toString();
 
-                android.os.StrictMode.ThreadPolicy policy = new android.os.StrictMode.ThreadPolicy.Builder().permitAll().build();
-                android.os.StrictMode.setThreadPolicy(policy);
-                registro(nombreU,telefono,nombre,email,pass);
+                    if (contra1.equals(contra2)) {
+                        ConnectionHandler.registerRequest(nombre, nombreUsuario, telefono, email, contra1);
+                        ConnectionHandler.waitForResponse();
+                        String respuesta = ConnectionHandler.getSimpleResponse();
+                        System.out.println("Respuesta: " + respuesta);
+                        if (respuesta.contains("bien")) {
+                            //ConnectionHandler.userDataRequest(nombreUsuario);
+                            //ConnectionHandler.waitForResponse();
+                            //ArrayList<String> userData = ConnectionHandler.getFullResponse();
+                            //UserInfo.setDataFromArray(userData);
 
+                            // Con el intent cambiamos a otra actividad que contiene el menú desplegable
+                            Intent intent = new Intent(view.getContext(), MainMenuActivity.class);
+                            startActivityForResult(intent, 0);
 
-                //NavHostFragment.findNavController(RegisterFragment.this)
-                 //       .navigate(R.id.action_RegisterFragment_to_LoginFragment);
+                            getActivity().finish(); // Cierra la actividad de inicio de sesión para no volver
+
+                            //NavHostFragment.findNavController(RegisterFragment.this).navigate(R.id.action_RegisterFragment_to_LoginFragment);
+                        }
+                        else{textAviso.setText("Datos incorrectos, por favor, rellena el formulario de nuevo");}
+
+                    } else {
+                        textAviso.setText("¡Las contraseñas no coinciden!");
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    textAviso.setText("Faltan datos o falló la conexión.");
+                }
+
             }
 
         });
-
-
-
     }
-    public void registro(String nameUser,int phone,String name ,String email,String pass)
-    {
-        String response = "";
-        String urlS= "http://192.168.1.108:8080/Parking2/Registro?nombreU="+nameUser+"&email="+email+"&pass="+pass+"&tlf="+phone+"&nombre="+name;
-        try {
-            URL url = new URL(urlS);
-            HttpURLConnection urlConnection = null;
-            urlConnection = (HttpURLConnection) url.openConnection();
-            //Get the information from the url
-            InputStream in = new BufferedInputStream(urlConnection.getInputStream());
-            response = convertStreamToString(in);
-            System.out.println(response);
-            //if response= login correcto ->seguir con la app normal
-            //if reponse = Falta usuario->
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-            //return null;
-        }
-        //return response;
 
 
-
-    }
-    private String convertStreamToString(InputStream is) {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-        StringBuilder sb = new StringBuilder();
-
-        String line = null;
-        try {
-            while ((line = reader.readLine()) != null) {
-                sb.append(line).append('\n');
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                is.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return sb.toString();
-    }
 }
