@@ -24,7 +24,7 @@ public class ConnectionHandler {
     private static ArrayList<String> response = new ArrayList<>();
     private static ArrayList<Parking> parkingList;
     private static CountDownLatch latch = new CountDownLatch(1);
-    private static String web = "http://192.168.1.129:8080";
+    private static String web = "http://192.168.1.114:8080";
 
     public static void registerRequest(final String name, final String username, final String phone,
                                        final String email, final String pass) {
@@ -86,7 +86,7 @@ public class ConnectionHandler {
             String urlS= web + "/Parking Server/Registro?nombreU=" + username + "&email=" + email
                     + "&pass=" + pass + "&tlf=" + phone + "&nombre=" + name;
             URL url = new URL(urlS);
-            HttpURLConnection connection = createConnection(url, "POST");
+            HttpURLConnection connection = createConnection(url, "GET");
             connection.connect();
             InputStream in = connection.getInputStream();
             response.add(0, convertStreamToString(in));

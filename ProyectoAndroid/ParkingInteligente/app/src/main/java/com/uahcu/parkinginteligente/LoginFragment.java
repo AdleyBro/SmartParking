@@ -42,17 +42,17 @@ public class LoginFragment extends Fragment {
                     String nombreUsuario = ETnombreUsuario.getText().toString();
                     String pass = ETpass.getText().toString();
 
-                    //ConnectionHandler.loginRequest(nombreUsuario, pass);
-                    //ConnectionHandler.waitForResponse();
+                    ConnectionHandler.loginRequest(nombreUsuario, pass);
+                    ConnectionHandler.waitForResponse();
 
-                    //String respuesta = ConnectionHandler.getSimpleResponse();
-                    //System.out.println("Respuesta: " + respuesta);
-                    //if (respuesta.contains("correcto")) {
-                    if (true) {
-                        //ConnectionHandler.userDataRequest(nombreUsuario);
-                        //ConnectionHandler.waitForResponse();
-                        //ArrayList<String> userData = ConnectionHandler.getFullResponse();
-                        //UserInfo.setDataFromArray(userData);
+                    String respuesta = ConnectionHandler.getSimpleResponse();
+                    System.out.println("Respuesta: " + respuesta);
+                    if (respuesta.contains("correcto")) {
+
+                        ConnectionHandler.userDataRequest(nombreUsuario);
+                        ConnectionHandler.waitForResponse();
+                        ArrayList<String> userData = ConnectionHandler.getFullResponse();
+                        UserInfo.setDataFromArray(userData);
 
                         // Con el intent cambiamos a otra actividad que contiene el menú desplegable
                         Intent intent = new Intent(view.getContext(), MainMenuActivity.class);
@@ -60,7 +60,7 @@ public class LoginFragment extends Fragment {
 
                         getActivity().finish(); // Cierra la actividad de inicio de sesión para no volver
                     } else {
-                        //textAviso.setText(respuesta);
+                        textAviso.setText(respuesta);
                         textAviso.setText("ww");
                     }
                 } catch (Exception e) {
