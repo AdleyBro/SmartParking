@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:orientation="vertical"
+    tools:context=".BookParkingSlotFragment">
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="bottom"
+        android:paddingStart="16dp"
+        android:paddingTop="16dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="16dp"
+        android:text="@string/titulo_reserva"
+        android:textAlignment="center"
+        android:textColor="@color/colorSecondary"
+        android:textSize="30sp" />
+
+    <EditText
+        android:id="@+id/editTextTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/colorSecondary"
+        android:ems="10"
+        android:foregroundTint="@color/colorSecondary"
+        android:hint="Hora de llegada"
+        android:inputType="time"
+        android:paddingTop="24dp"
+        android:textColor="@color/colorSecondary"
+        android:textColorHint="@color/colorSecondary" />
+
+    <EditText
+        android:id="@+id/editTextDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/colorSecondary"
+        android:ems="10"
+        android:hint="Fecha de llegada"
+        android:inputType="date"
+        android:paddingTop="24dp"
+        android:textColor="@color/colorSecondary"
+        android:textColorHint="@color/colorSecondary" />
+
+    <EditText
+        android:id="@+id/editTextTime2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/colorSecondary"
+        android:ems="10"
+        android:hint="Hora de salida"
+        android:inputType="time"
+        android:paddingTop="24dp"
+        android:textColor="@color/colorSecondary"
+        android:textColorHint="@color/colorSecondary" />
+
+    <EditText
+        android:id="@+id/editTextDate2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/colorSecondary"
+        android:ems="10"
+        android:hint="Fecha de salida"
+        android:inputType="date"
+        android:paddingTop="24dp"
+        android:textColor="@color/colorSecondary"
+        android:textColorHint="@color/colorSecondary" />
+
+    <Button
+        android:id="@+id/buttonConfirmarReserva"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:background="@color/colorSecondary"
+        android:text="CONFIRMAR"
+        android:textColor="@color/background" />
+</LinearLayout>

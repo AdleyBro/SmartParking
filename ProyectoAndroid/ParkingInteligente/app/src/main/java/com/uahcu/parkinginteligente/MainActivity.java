@@ -4,7 +4,12 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 public class MainActivity extends AppCompatActivity {
+
+    public static ExecutorService executorService = Executors.newFixedThreadPool(4);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
