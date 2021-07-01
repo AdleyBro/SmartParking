@@ -1,21 +1,21 @@
-d:\Uni\Computacion ubicua\backup\backup2\Parking Server\src\db\Parking.java
-d:\Uni\Computacion ubicua\backup\backup2\Parking Server\src\logic\ProjectInitializer.java
-d:\Uni\Computacion ubicua\backup\backup2\Parking Server\src\servlets\Registro.java
-d:\Uni\Computacion ubicua\backup\backup2\Parking Server\src\db\Plaza.java
-d:\Uni\Computacion ubicua\backup\backup2\Parking Server\src\servlets\GetPlazas.java
-d:\Uni\Computacion ubicua\backup\backup2\Parking Server\src\db\Cliente.java
-d:\Uni\Computacion ubicua\backup\backup2\Parking Server\src\servlets\GetDatosCliente.java
-d:\Uni\Computacion ubicua\backup\backup2\Parking Server\src\db\Reserva.java
-d:\Uni\Computacion ubicua\backup\backup2\Parking Server\src\mqtt\MQTTPublisher.java
-d:\Uni\Computacion ubicua\backup\backup2\Parking Server\src\servlets\GetReservaProxima.java
-d:\Uni\Computacion ubicua\backup\backup2\Parking Server\src\servlets\ReservarPlaza.java
-d:\Uni\Computacion ubicua\backup\backup2\Parking Server\src\mqtt\MQTTBroker.java
-d:\Uni\Computacion ubicua\backup\backup2\Parking Server\src\db\ConectionDB.java
-d:\Uni\Computacion ubicua\backup\backup2\Parking Server\src\db\Tabla_de_precios.java
-d:\Uni\Computacion ubicua\backup\backup2\Parking Server\src\servlets\AbrirPuerta.java
-d:\Uni\Computacion ubicua\backup\backup2\Parking Server\src\mqtt\MQTTSuscriber.java
-d:\Uni\Computacion ubicua\backup\backup2\Parking Server\src\servlets\GetMapaParking.java
-d:\Uni\Computacion ubicua\backup\backup2\Parking Server\src\db\Usuario.java
-d:\Uni\Computacion ubicua\backup\backup2\Parking Server\src\servlets\InicioSesion.java
-d:\Uni\Computacion ubicua\backup\backup2\Parking Server\src\logic\Logic.java
-d:\Uni\Computacion ubicua\backup\backup2\Parking Server\src\db\Historial_plazas.java
+c:\Users\belovedNotUsed\Desktop\Arriba\XD\SmartParking\Parking Server\src\mqtt\MQTTSuscriber.java
+c:\Users\belovedNotUsed\Desktop\Arriba\XD\SmartParking\Parking Server\src\db\Tabla_de_precios.java
+c:\Users\belovedNotUsed\Desktop\Arriba\XD\SmartParking\Parking Server\src\servlets\GetPlazas.java
+c:\Users\belovedNotUsed\Desktop\Arriba\XD\SmartParking\Parking Server\src\servlets\Registro.java
+c:\Users\belovedNotUsed\Desktop\Arriba\XD\SmartParking\Parking Server\src\db\Reserva.java
+c:\Users\belovedNotUsed\Desktop\Arriba\XD\SmartParking\Parking Server\src\db\Usuario.java
+c:\Users\belovedNotUsed\Desktop\Arriba\XD\SmartParking\Parking Server\src\logic\ProjectInitializer.java
+c:\Users\belovedNotUsed\Desktop\Arriba\XD\SmartParking\Parking Server\src\mqtt\MQTTBroker.java
+c:\Users\belovedNotUsed\Desktop\Arriba\XD\SmartParking\Parking Server\src\servlets\ReservarPlaza.java
+c:\Users\belovedNotUsed\Desktop\Arriba\XD\SmartParking\Parking Server\src\db\Parking.java
+c:\Users\belovedNotUsed\Desktop\Arriba\XD\SmartParking\Parking Server\src\db\Cliente.java
+c:\Users\belovedNotUsed\Desktop\Arriba\XD\SmartParking\Parking Server\src\servlets\GetDatosCliente.java
+c:\Users\belovedNotUsed\Desktop\Arriba\XD\SmartParking\Parking Server\src\servlets\GetReservaProxima.java
+c:\Users\belovedNotUsed\Desktop\Arriba\XD\SmartParking\Parking Server\src\servlets\InicioSesion.java
+c:\Users\belovedNotUsed\Desktop\Arriba\XD\SmartParking\Parking Server\src\servlets\GetMapaParking.java
+c:\Users\belovedNotUsed\Desktop\Arriba\XD\SmartParking\Parking Server\src\db\Historial_plazas.java
+c:\Users\belovedNotUsed\Desktop\Arriba\XD\SmartParking\Parking Server\src\servlets\AbrirPuerta.java
+c:\Users\belovedNotUsed\Desktop\Arriba\XD\SmartParking\Parking Server\src\logic\Logic.java
+c:\Users\belovedNotUsed\Desktop\Arriba\XD\SmartParking\Parking Server\src\mqtt\MQTTPublisher.java
+c:\Users\belovedNotUsed\Desktop\Arriba\XD\SmartParking\Parking Server\src\db\ConectionDB.java
+c:\Users\belovedNotUsed\Desktop\Arriba\XD\SmartParking\Parking Server\src\db\Plaza.java

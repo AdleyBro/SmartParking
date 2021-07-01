@@ -224,7 +224,7 @@ public class Logic {
 
 			rs.next();
 			conteo = rs.getInt("recuento");
-
+			
 		} catch (SQLException e) {
 			e.getMessage();
 			
@@ -240,9 +240,9 @@ public class Logic {
 		} finally {
 
 			conector.closeConnection(con);
-
+			return conteo > 0;
 		}
-		return conteo > 0;
+		
 	}
 
 	public static ArrayList<Plaza> getPlazaFromDB(int IdParking, String fechaInicio, String fechaFin) {

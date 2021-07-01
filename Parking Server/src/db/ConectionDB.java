@@ -99,7 +99,7 @@ public class ConectionDB {
 
   public static PreparedStatement getCountUsuario(Connection con) {
 
-    return getStatement(con, "SELECT count(NombreDeUsuario) as recuento FROM usuario WHERE NombreDeUsuario=? ");
+    return getStatement(con, "SELECT count(NombreDeUsuario) as recuento FROM cliente WHERE NombreDeUsuario=? ");
   }
 
   public static PreparedStatement setUsuario(Connection con) {
