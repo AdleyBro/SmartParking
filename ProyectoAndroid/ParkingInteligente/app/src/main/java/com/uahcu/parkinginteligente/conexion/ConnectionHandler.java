@@ -81,6 +81,15 @@ public class ConnectionHandler {
         });
     }
 
+    public static void openParkingDoorRequest() {
+        MainActivity.executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+                doOpenParkingDoor();
+            }
+        });
+    }
+
     private static void doRegisterRequest(String name, String username, String phone, String email, String pass) {
         try {
             String urlS= web + "/Parking Server/Registro?nombreU=" + username + "&email=" + email
@@ -165,13 +174,27 @@ public class ConnectionHandler {
 
     private static void doBookParkingSlotRequest() {
         try {
-            String urlS = web + "/Parking Server/ReservarPlaza?idpark=" + BookingInfo.parking.getId_parking() +
-                    "nombreU=" + UserInfo.getNombreUsuario() + "fechaI=" + BookingInfo.fechaHoraIni + "fechaF=" + BookingInfo.fechaHoraFin;
+            String urlS = web + "/Parking Server/ReservarPlaza?idpark=" + BookingInfo.getParking().getId_parking() +
+                    "&nombreU=" + UserInfo.getNombreUsuario() + "&fechaI=" + BookingInfo.getFechaHoraIni() + "&fechaF=" + BookingInfo.getFechaHoraFin();
             URL url = new URL(urlS);
             HttpURLConnection connection = createConnection(url, "POST");
             connection.connect();
             InputStream in = connection.getInputStream();
             response = convertStreamToArrayList(in);
+            latch.countDown();
+            connection.disconnect();
+        } catch (IOException e) {
+            e.printStackTrace();
+            latch.countDown();
+        }
+    }
+
+    private static void doOpenParkingDoor() {
+        try {
+            String urlS = web + "/Parking Server/AbrirPuerta?idpark=" + BookingInfo.getIdParking() + "&nombreU=" + UserInfo.getNombreUsuario();
+            URL url = new URL(urlS);
+            HttpURLConnection connection = createConnection(url, "POST");
+            connection.connect();
             latch.countDown();
             connection.disconnect();
         } catch (IOException e) {

@@ -79,7 +79,7 @@ public class ConectionDB {
   public static PreparedStatement getPlazasParking(Connection con) {
 
     return getStatement(con,
-        "SELECT * FROM (SELECT * FROM plaza where IdParking=? AND EsReservable=1) as PlazaBien WHERE plazabien.IdPlaza NOT IN (Select Idplaza FROM reserva WHERE IdParking=? AND ((FechaHoraInicio BETWEEN ?  AND ? ) OR (FechaHoraFin BETWEEN ?  AND ?)))");
+        "SELECT * FROM (SELECT * FROM plaza where IdParking=? AND EsReservable=1) as PlazaBien WHERE plazabien.IdPlaza NOT IN (Select Idplaza FROM reserva WHERE IdParking=? AND ((FechaHoraInicio BETWEEN ?  AND ? ) OR (FechaHoraFin BETWEEN ?  AND ?))) LIMIT 0,1");
   }
   public static PreparedStatement getPlazasParkingMosquitto(Connection con) {
 
@@ -99,7 +99,7 @@ public class ConectionDB {
 
   public static PreparedStatement getCountUsuario(Connection con) {
 
-    return getStatement(con, "SELECT count(NombreDeUsuario) as recuento FROM Cliente WHERE NombreDeUsuario=? ");
+    return getStatement(con, "SELECT COUNT(NombreDeUsuario) as recuento FROM Cliente WHERE NombreDeUsuario=? ");
   }
 
   public static PreparedStatement getCliente(Connection con) {
@@ -156,6 +156,50 @@ public class ConectionDB {
   public static PreparedStatement getFechaE(Connection con) {
     return getStatement(con, "SELECT FechaHoraEntrada FROM Historial plazas WHERE IdPlaza=? ORDER BY FechaHoraEntrada ASC;");
   }
+  public static PreparedStatement updateEstadoCliente(Connection con) {
+
+    return getStatement(con, "UPDATE Cliente SET EstaDentro = ? WHERE NombreDeUsuario = ?;");
+  }
+  public static PreparedStatement getEstadoCliente(Connection con) {
+    return getStatement(con, "SELECT EstaDentro FROM Cliente WHERE NombreDeUsuario = ?;");
+  }
+
+
+  //************** Queries estadísticas ********************/
+
+    /**
+    Query para el uso estadistico, devuelve las plazas más comunes
+   */
+  public static PreparedStatement getPlazasComunes(Connection con) {
+    return getStatement(con,
+        "SELECT IdPlaza,COUNT(IdPlaza) AS nOcupaciones FROM `historial plazas` WHERE IdParking=? GROUP BY IdPlaza ORDER BY nOcupaciones DESC;");
+
+        
+  }
+
+    /**
+    Query para el uso estadistico, devuelve el día de la semana con más reservas
+   */
+  public static PreparedStatement getDiaMasComun(Connection con){
+    return getStatement(con,
+        "SELECT count(IdPlaza) as recuento,DAYOFWEEK(FechaHoraInicio) as dia from reserva where IdParking =? GROUP BY DAYOFWEEK(FechaHoraInicio) ORDER BY recuento DESC;");
+  }
+
+/**
+    Query para el uso estadistico, devuelve numero de usuarios registrados en el último mes
+   */
+  public static PreparedStatement getNUserMonth(Connection con) {
+    return getStatement(con,
+        "SELECT COUNT(NombreDeUsuario) AS nClientesM FROM Cliente WHERE  FechaDeRegistro BETWEEN CURRENT_TIMESTAMP - interval 1 month AND CURRENT_TIMESTAMP;");
+  }
+  /**
+    Query para el uso estadistico, devuelve numero de usuarios que han entrado al parking en un día determinado
+   */
+  public static PreparedStatement getNUserParking(Connection con) {
+    return getStatement(con,
+        "SELECT COUNT(NombreDeUsuario) AS nClientesH FROM HistorialEntrada WHERE IdParking =? FechaEntrada BETWEEN ?  AND ? + interval 1 day;");
+  }
+
 
 
   /*

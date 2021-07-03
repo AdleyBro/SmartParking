@@ -9,6 +9,7 @@ import java.sql.Time;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import db.ConectionDB;
 import db.Parking;
@@ -173,11 +174,10 @@ public class Logic {
 		
 	}
 
-	public static ArrayList<Plaza> getPlazaFromDB(int IdParking, String fechaInicio, String fechaFin) {
-		ArrayList<Plaza> plazas = new ArrayList<Plaza>();
-		
+	public static int getPlazaFromDB(int IdParking, String fechaInicio, String fechaFin) {
 		ConectionDB conector = new ConectionDB();
 		Connection con = null;
+		int idPlaza = -1;
 		try {
 			con = conector.obtainConnection();
 
@@ -190,14 +190,14 @@ public class Logic {
 			ps.setString(6, fechaFin);
 			
 			ResultSet rs = ps.executeQuery();
-			while (rs.next()) {
-				Plaza plaza = new Plaza();
-				plaza.setId_parking(rs.getInt("IdParking"));
-				plaza.setId_plaza(rs.getInt("IdPlaza"));
-				plaza.setEsta_ocupado(rs.getBoolean("EstaOcupado"));
-				plaza.setEs_reservable(rs.getBoolean("EsReservable"));
-				plazas.add(plaza);
-			}
+			rs.next();
+			//plaza.setId_parking(rs.getInt("IdParking"));
+			//plaza.setId_plaza(rs.getInt("IdPlaza"));
+			//plaza.setEsta_ocupado(rs.getBoolean("EstaOcupado"));
+			//plaza.setEs_reservable(rs.getBoolean("EsReservable"));
+			idPlaza = rs.getInt("IdPlaza");
+
+
 		} catch (
 
 		SQLException e) {
@@ -209,7 +209,7 @@ public class Logic {
 		} finally {
 			conector.closeConnection(con);
 		}
-		return plazas;
+		return idPlaza;
 	}
 
 	public static ArrayList<Parking> getParkingFromDB() {
@@ -286,28 +286,30 @@ public class Logic {
 		return php;
 	}
 	
-	public static boolean storeNewReserva(String fechaI, String fechaF, String nombreUsuario, int idparking, int idplaza, double preciopagado) {
+	public static Boolean storeNewReserva(String fechaI, String fechaF, String nombreUsuario, int idparking, int idplaza, double preciopagado) {
 		 ConectionDB conector = new ConectionDB();
 		 Connection con = null;
 		try {
 			con = conector.obtainConnection();
 
 			PreparedStatement ps = ConectionDB.setReserva(con);
-			ps.setString(1, fechaF);
-			ps.setString(2, fechaI);
-			ps.setString(3, nombreUsuario);
-			ps.setInt(4, idparking);
+			ps.setString(1, fechaI);
+			ps.setString(2, fechaF);
+			ps.setDouble(3, preciopagado);
+			ps.setString(4, nombreUsuario);
 			ps.setInt(5, idplaza);
-			ps.setDouble(6, preciopagado);
+			ps.setInt(6, idparking);
+			
+			
 		
 			ps.executeUpdate();
 			return true;
-		} catch (SQLException e) {
-			e.getMessage();
-		
+		} catch (SQLException sqle) {
+			
+			sqle.getMessage();
 			return false;
-		} catch (NullPointerException e) {
-			e.getMessage();
+		} catch (NullPointerException nulle) {
+			nulle.getMessage();
 		
 			return false;
 		} catch (Exception e) {
@@ -623,4 +625,242 @@ public class Logic {
 		return fechaE;
 	}
 	
+	public static boolean getEstadoCliente(String nombre_usuario) {
+		ConectionDB conector = new ConectionDB();
+		Connection con = null;
+		boolean estaDentro = false;
+		try {
+
+			con = conector.obtainConnection();
+			
+			PreparedStatement ps = ConectionDB.getEstadoCliente(con);
+			ps.setString(1, nombre_usuario);
+			
+			ResultSet rs = ps.executeQuery();
+
+			rs.next();
+			estaDentro = rs.getBoolean("EstaDentro");
+
+			
+		} catch (SQLException e) {
+			e.getMessage();
+		
+
+		} catch (NullPointerException e) {
+			e.getMessage();
+		
+
+		} catch (Exception e) {
+			e.getMessage();
+			
+
+		} finally {
+
+			conector.closeConnection(con);
+
+		}
+		return estaDentro;
+	}
+	public static void updateEstadoCliente(boolean estadoCliente,String nombre_usuario) {
+		ConectionDB conector = new ConectionDB();
+		Connection con = null;
+		try {
+
+			con = conector.obtainConnection();
+			
+			PreparedStatement ps = ConectionDB.updateEstadoCliente(con);
+			ps.setBoolean(1, estadoCliente);
+			ps.setString(2, nombre_usuario);
+			
+			ResultSet rs = ps.executeQuery();
+
+			
+		} catch (SQLException e) {
+			e.getMessage();
+		
+
+		} catch (NullPointerException e) {
+			e.getMessage();
+		
+
+		} catch (Exception e) {
+			e.getMessage();
+			
+
+		} finally {
+
+			conector.closeConnection(con);
+		}
+		
+	}
+
+	/**
+		Función estadística, enseña al usuario las plazas más comunes
+	 */
+	public static HashMap<Integer,Integer> getPlazasMasUsadas(int parking) {
+		HashMap<Integer,Integer> plazas = new HashMap<Integer,Integer>();
+
+		ConectionDB conector = new ConectionDB();
+		Connection con = null;
+		try {
+			con = conector.obtainConnection();
+
+			PreparedStatement ps = ConectionDB.getPlazasComunes(con);
+			ps.setInt(1,parking);
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				
+				rs.getFetchDirection();
+				plazas.put(rs.getInt("IdPlaza"), rs.getInt("nOcupaciones"));
+			}
+		} catch (SQLException e) {
+
+		} catch (NullPointerException e) {
+
+		} catch (Exception e) {
+
+		} finally {
+			conector.closeConnection(con);
+		}
+		return plazas;
+	}
+
+	public static int getNUserMonth() {
+		ConectionDB conector = new ConectionDB();
+		Connection con = null;
+		int nUser=0;
+		try {
+
+			con = conector.obtainConnection();
+			
+
+			PreparedStatement ps = ConectionDB.getNUserMonth(con);
+			
+			ResultSet rs = ps.executeQuery();
+
+			rs.next();
+			nUser = rs.getInt("nClientesM");
+
+			
+		} catch (SQLException e) {
+			e.getMessage();
+		
+
+		} catch (NullPointerException e) {
+			e.getMessage();
+		
+
+		} catch (Exception e) {
+			e.getMessage();
+			
+
+		} finally {
+
+			conector.closeConnection(con);
+
+		}
+		return nUser;
+	}
+	public static int getNUserParking(int idparking, Timestamp fechaHora) {
+		ConectionDB conector = new ConectionDB();
+		Connection con = null;
+		int nUser=0;
+		try {
+
+			con = conector.obtainConnection();
+
+			PreparedStatement ps = ConectionDB.getNUserParking(con);
+			ps.setInt(1, idparking);
+			ps.setString(2, sdf.format(fechaHora));
+			ps.setString(3, sdf.format(fechaHora));
+			ResultSet rs = ps.executeQuery();
+
+			rs.next();
+			nUser = rs.getInt("nClientesH");
+
+			
+		} catch (SQLException e) {
+			e.getMessage();
+		
+
+		} catch (NullPointerException e) {
+			e.getMessage();
+		
+
+		} catch (Exception e) {
+			e.getMessage();
+			
+
+		} finally {
+
+			conector.closeConnection(con);
+
+		}
+		return nUser;
+	}
+	public static String getDiaMasReservado(int idparking) {
+		ConectionDB conector = new ConectionDB();
+		Connection con = null;
+		String dia="";
+		int dayOw=0;
+		try {
+
+			con = conector.obtainConnection();
+			
+
+			PreparedStatement ps = ConectionDB.getNUserParking(con);
+			ps.setInt(1, idparking);
+			ResultSet rs = ps.executeQuery();
+
+			rs.next();
+			dayOw = rs.getInt("dia");
+			switch (dayOw) {
+				case 1:
+					dia= "Domingo";
+					break;
+				case 2:
+					dia= "Lunes";
+					break;
+				case 3:
+					dia= "Martes";
+					break;
+				case 4:
+					dia= "Miercoles";
+					break;
+				case 5:
+					dia= "Jueves";
+					break;
+				case 6:
+					dia= "Viernes";
+					break;
+				case 7:
+					dia= "Sabado";
+					break;
+				
+			}
+			
+			
+		} catch (SQLException e) {
+			e.getMessage();
+		
+
+		} catch (NullPointerException e) {
+			e.getMessage();
+		
+
+		} catch (Exception e) {
+			e.getMessage();
+			
+
+		} finally {
+
+			conector.closeConnection(con);
+
+		}
+		return dia;
+	}
+
+
+
+
 }

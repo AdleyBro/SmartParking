@@ -29,12 +29,12 @@
         android:label="fragment_book_parking_slot"
         tools:layout="@layout/fragment_book_parking_slot" >
         <action
-            android:id="@+id/action_bookParkingSlotFragment_to_exitoEnReserva"
-            app:destination="@id/exitoEnReserva" />
+            android:id="@+id/action_bookParkingSlotFragment_to_resultadoReserva"
+            app:destination="@id/resultadoReserva" />
     </fragment>
     <fragment
-        android:id="@+id/exitoEnReserva"
-        android:name="com.uahcu.parkinginteligente.ExitoEnReserva"
-        android:label="fragment_exito_en_reserva"
-        tools:layout="@layout/fragment_exito_en_reserva" />
+        android:id="@+id/resultadoReserva"
+        android:name="com.uahcu.parkinginteligente.ResultadoReserva"
+        android:label="fragment_resultado_reserva"
+        tools:layout="@layout/fragment_resultado_reserva" />
 </navigation>

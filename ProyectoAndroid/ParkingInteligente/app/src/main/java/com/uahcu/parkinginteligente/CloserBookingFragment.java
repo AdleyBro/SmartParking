@@ -1,8 +1,12 @@
 package com.uahcu.parkinginteligente;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,14 +19,16 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.uahcu.parkinginteligente.ui.AbrirPuerta;
 
 import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class CloserBookingFragment extends Fragment implements OnMapReadyCallback {
+public class CloserBookingFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
     private MapView mapView;
     private GoogleMap map;
@@ -32,6 +38,7 @@ public class CloserBookingFragment extends Fragment implements OnMapReadyCallbac
 
     public CloserBookingFragment(ArrayList<String> respuesta) {
         this.respuesta = respuesta;
+        BookingInfo.setIdParking(respuesta.get(4));
     }
 
     @Override
@@ -46,8 +53,10 @@ public class CloserBookingFragment extends Fragment implements OnMapReadyCallbac
         View v = inflater.inflate(R.layout.fragment_closer_booking, container, false);
 
         TextView fechaHora = v.findViewById(R.id.textBookingTime);
-        fechaHora.setText(String.format("Fecha y hora: %s", respuesta.get(2)));
+        fechaHora.setText(String.format("Fecha y hora: %s", respuesta.get(1)));
 
+        TextView localizacion = v.findViewById(R.id.text_localizacion);
+        localizacion.setText("Localización: Nº Plaza " + respuesta.get(0));
         mapView = v.findViewById(R.id.mapCloserBooking);
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
@@ -59,11 +68,13 @@ public class CloserBookingFragment extends Fragment implements OnMapReadyCallbac
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
 
-        LatLng parking = new LatLng(Double.parseDouble(respuesta.get(6)), Double.parseDouble(respuesta.get(7)));
+        LatLng parking = new LatLng(Double.parseDouble(respuesta.get(5)), Double.parseDouble(respuesta.get(6)));
         map.addMarker(new MarkerOptions().position(parking).title("Plaza reservada"));
         map.getUiSettings().setZoomControlsEnabled(true);
         map.animateCamera(CameraUpdateFactory.newLatLngZoom(parking, 15));
         mapView.onResume();
+
+        map.setOnMarkerClickListener(this);
     }
 
     @Override
@@ -88,5 +99,11 @@ public class CloserBookingFragment extends Fragment implements OnMapReadyCallbac
     public void onLowMemory() {
         super.onLowMemory();
         mapView.onLowMemory();
+    }
+
+    @Override
+    public boolean onMarkerClick(@NonNull Marker marker) {
+        startActivity(new Intent(getActivity(), AbrirPuerta.class));
+        return true;
     }
 }

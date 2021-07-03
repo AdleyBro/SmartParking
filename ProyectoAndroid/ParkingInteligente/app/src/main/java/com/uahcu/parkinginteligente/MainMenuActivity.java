@@ -12,6 +12,8 @@ import com.google.android.material.navigation.NavigationView;
 import com.uahcu.parkinginteligente.conexion.ConnectionHandler;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.core.view.GravityCompat;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -23,9 +25,10 @@ import androidx.appcompat.widget.Toolbar;
 
 import java.util.ArrayList;
 
-public class MainMenuActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainMenuActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
+    private DrawerLayout drawer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,9 +40,12 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
         setSupportActionBar(toolbar);
 
         // DRAWER
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this); // Listener para detectar los botones del menú desplegable
+        drawer = findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = findViewById(R.id.navigation_view);
         View headerView = navigationView.getHeaderView(0);
         ((TextView) headerView.findViewById(R.id.navHeaderNombre)).setText(UserInfo.getNombreUsuario());
         ((TextView) headerView.findViewById(R.id.navHeaderEmail)).setText(UserInfo.getEmail());
@@ -63,6 +69,7 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
             e.printStackTrace();
         }
         ArrayList<String> respuesta = ConnectionHandler.getFullResponse();
+        System.out.println(respuesta);
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         if (respuesta.size() > 2) {
             ft.replace(R.id.mapPlaceholder, new CloserBookingFragment(respuesta));
@@ -70,6 +77,15 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
             ft.replace(R.id.mapPlaceholder, new NoParkingSlotFragment());
         }
         ft.commit();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
     }
 
     @Override
@@ -84,20 +100,5 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
-    }
-
-    @SuppressLint("NonConstantResourceId")
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-        switch(menuItem.getItemId()) {
-            case R.id.nav_cerrar_sesion:
-                getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
-                        new RegisterFragment()).commit();
-                break;
-            default:
-                break;
-        }
-
-        return true;
     }
 }

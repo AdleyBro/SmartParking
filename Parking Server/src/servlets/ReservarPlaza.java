@@ -26,30 +26,29 @@ public class ReservarPlaza extends HttpServlet {
 	{
 		response.setContentType("text/html;charset=UTF-8");
 		PrintWriter out = response.getWriter();
-		int idcliente;
 		String respuesta;
+		Boolean ok = false;
 		try 
 		{ 
-			int idplaza = Integer.parseInt(request.getParameter("idplaza"));
 			int idparking = Integer.parseInt(request.getParameter("idpark"));
 			String nombreUsuario = request.getParameter("nombreU"); 
             String fechaI = request.getParameter("fechaI");
 			String fechaF = request.getParameter("fechaF");
-			//idcliente = Logic.getIdCliente(nombreUsuario);
 			double diferenciaEnHoras = Math.abs((float)((float)(Timestamp.valueOf(fechaF).getTime() - Timestamp.valueOf(fechaI).getTime())/3600000.00)); //2.0-> 2:30 2.0
-			String hoursI = fechaI.substring(10, 18);
-			double precio = diferenciaEnHoras * Logic.getHoraParking(idparking,hoursI);
-			ArrayList<Plaza> values = Logic.getPlazaFromDB(idparking, fechaI, fechaF);
-			idplaza = values.get(0).getId_plaza();
+			String hoursI = fechaI.substring(10, 18);// yyyy-mm-dd 20:30:40
+			double precio = 1.1 * Logic.getHoraParking(idparking,hoursI);
+			int idPlaza = Logic.getPlazaFromDB(idparking, fechaI, fechaF);
 
-			Logic.storeNewReserva(fechaI, fechaF, nombreUsuario, idparking, idplaza, precio);
-
-			respuesta = "Plaza reservada";
+			ok=Logic.storeNewReserva(fechaI, fechaF, nombreUsuario, idparking, idPlaza, precio);
+			if(ok){respuesta = "Plaza reservada. El número de la plaza es " + idPlaza;}
+			else{respuesta = "No hay plazas disponibles para el horario indicado";}
+			
     
             out.println(respuesta);
 
 		} catch (Exception e) {
-			respuesta = "Plaza no disponible ";
+			respuesta = e.toString();
+			//respuesta = "Formato incorrecto. Debe ser: YYYY/MM/dd hh:mm:ss";
 			out.println(respuesta);
 		} finally {
 			out.close();
