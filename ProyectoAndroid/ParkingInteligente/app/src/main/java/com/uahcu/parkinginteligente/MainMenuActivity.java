@@ -56,7 +56,7 @@ public class MainMenuActivity extends AppCompatActivity implements NavigationVie
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
-        ConnectionHandler.closestBookingRequest(UserInfo.getId());
+        ConnectionHandler.closestBookingRequest(UserInfo.getNombreUsuario());
         try {
             ConnectionHandler.waitForResponse();
         } catch (InterruptedException e) {

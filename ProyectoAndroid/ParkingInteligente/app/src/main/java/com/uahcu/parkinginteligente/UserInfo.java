@@ -7,14 +7,19 @@ public class UserInfo {
     private static String nombre;
     private static String email;
     private static String telefono;
-    private static String id;
 
     public static void setDataFromArray(ArrayList<String> response) {
         nombreUsuario = response.get(6);
         nombre = response.get(1);
         email = response.get(2);
         telefono = response.get(3);
-        id = response.get(0);
+    }
+
+    public static void setData(String nombreU, String nombre, String email, String telefono) {
+        nombreUsuario = nombreU;
+        UserInfo.nombre = nombre;
+        UserInfo.email = email;
+        UserInfo.telefono = telefono;
     }
 
     public static String getNombreUsuario() {
@@ -33,7 +38,4 @@ public class UserInfo {
         return telefono;
     }
 
-    public static String getId() {
-        return id;
-    }
 }

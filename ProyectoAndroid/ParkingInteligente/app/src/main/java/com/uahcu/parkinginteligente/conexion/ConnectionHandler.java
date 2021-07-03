@@ -24,7 +24,7 @@ public class ConnectionHandler {
     private static ArrayList<String> response = new ArrayList<>();
     private static ArrayList<Parking> parkingList;
     private static CountDownLatch latch = new CountDownLatch(1);
-    private static String web = "http://192.168.0.167:8080";
+    private static String web = "http://192.168.1.130:8080";
 
     public static void registerRequest(final String name, final String username, final String phone,
                                        final String email, final String pass) {
@@ -45,20 +45,20 @@ public class ConnectionHandler {
         });
     }
 
-    public static void userDataRequest(final String username) {
+    public static void userDataRequest(final String nombreU) {
         MainActivity.executorService.execute(new Runnable() {
             @Override
             public void run() {
-                doUserDataRequest(username);
+                doUserDataRequest(nombreU);
             }
         });
     }
 
-    public static void closestBookingRequest(final String clientId) {
+    public static void closestBookingRequest(final String nombreU) {
         MainActivity.executorService.execute(new Runnable() {
             @Override
             public void run() {
-                doClosestBookingRequest(clientId);
+                doClosestBookingRequest(nombreU);
             }
         });
     }
@@ -86,7 +86,7 @@ public class ConnectionHandler {
             String urlS= web + "/Parking Server/Registro?nombreU=" + username + "&email=" + email
                     + "&pass=" + pass + "&tlf=" + phone + "&nombre=" + name;
             URL url = new URL(urlS);
-            HttpURLConnection connection = createConnection(url, "GET");
+            HttpURLConnection connection = createConnection(url, "POST");
             connection.connect();
             InputStream in = connection.getInputStream();
             response.add(0, convertStreamToString(in));
@@ -131,9 +131,9 @@ public class ConnectionHandler {
         }
     }
 
-    private static void doClosestBookingRequest(String clientId) {
+    private static void doClosestBookingRequest(String nombreU) {
         try {
-            String urlS = web + "/Parking Server/GetReservaProxima?idCliente=" + clientId;
+            String urlS = web + "/Parking Server/GetReservaProxima?nombreU=" + nombreU;
             URL url = new URL(urlS);
             HttpURLConnection connection = createConnection(url, "POST");
             connection.connect();
@@ -193,15 +193,15 @@ public class ConnectionHandler {
     private static ArrayList<Parking> convertToParkingMap(InputStream is) {
         String input = convertStreamToString(is);
         String[] parkings = input.split("_");
-        ArrayList<Parking> parkingListt = new ArrayList<>();
+        ArrayList<Parking> parkingList = new ArrayList<>();
         for (String parking : parkings) {
             String[] atributos = parking.split("#");
             Parking parkingObj = new Parking(Integer.parseInt(atributos[0]), atributos[1], atributos[2],
                             Double.parseDouble(atributos[3]), Double.parseDouble(atributos[4]));
-            parkingListt.add(parkingObj);
+            parkingList.add(parkingObj);
         }
 
-        return parkingListt;
+        return parkingList;
     }
 
     private static ArrayList<String> convertStreamToArrayList(InputStream is) {

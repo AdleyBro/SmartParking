@@ -11,7 +11,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.fragment.NavHostFragment;
 
 import com.uahcu.parkinginteligente.conexion.ConnectionHandler;
 
@@ -58,10 +57,7 @@ public class RegisterFragment extends Fragment {
                         String respuesta = ConnectionHandler.getSimpleResponse();
                         System.out.println("Respuesta: " + respuesta);
                         if (respuesta.contains("bien")) {
-                            //ConnectionHandler.userDataRequest(nombreUsuario);
-                            //ConnectionHandler.waitForResponse();
-                            //ArrayList<String> userData = ConnectionHandler.getFullResponse();
-                            //UserInfo.setDataFromArray(userData);
+                            UserInfo.setData(nombreUsuario, nombre, email, telefono);
 
                             // Con el intent cambiamos a otra actividad que contiene el menú desplegable
                             Intent intent = new Intent(view.getContext(), MainMenuActivity.class);
@@ -69,15 +65,14 @@ public class RegisterFragment extends Fragment {
 
                             getActivity().finish(); // Cierra la actividad de inicio de sesión para no volver
 
-                            //NavHostFragment.findNavController(RegisterFragment.this).navigate(R.id.action_RegisterFragment_to_LoginFragment);
+                            //NavHostFragment.findNavController(RegisterFragment.this)
+                            //        .navigate(R.id.action_RegisterFragment_to_LoginFragment);
                         }
-                        else{textAviso.setText("Datos incorrectos, por favor, rellena el formulario de nuevo");}
 
                     } else {
                         textAviso.setText("¡Las contraseñas no coinciden!");
                     }
                 } catch (Exception e) {
-                    e.printStackTrace();
                     textAviso.setText("Faltan datos o falló la conexión.");
                 }
 

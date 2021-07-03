@@ -43,6 +43,9 @@ public class MainMenuFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // -------------------------
+        // Botón que lleva a la pantalla de reserva
+        // -------------------------
         view.findViewById(R.id.buttonReservar).setOnTouchListener(new View.OnTouchListener() {
               @Override
               public boolean onTouch(View v, MotionEvent event) {
