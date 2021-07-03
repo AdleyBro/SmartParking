@@ -18,10 +18,10 @@ import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 import db.ConectionDB;
 import db.Plaza;
 import db.Parking;
-import logic.Logic;
+import logic.*;
 
 public class MQTTSuscriber implements MqttCallback {
-
+    
     public void searchTopicsToSuscribe(MQTTBroker broker) {
         //TODO: sirve para buscar los topics para suscribirse con formato /ParkingIdParking/PlazaIdPlaza
         //TODO: LOS TOPICS NO SE INICIAN SOLOS, PARA CREAR UN TOPIC LO HACES DESDE EL CMD( mosquitto_pub -h localhost -p 1883 -t 'topic que quieres crear' -m "mensaje a mandar "  -d)
@@ -56,6 +56,7 @@ public class MQTTSuscriber implements MqttCallback {
             conector.closeConnection(connection);
         }
     }
+    
 
     // se crea un cliente y este se suscribe a todos los topicos
     public void subscribeTopic(MQTTBroker broker, ArrayList<String> topics){
@@ -75,6 +76,7 @@ public class MQTTSuscriber implements MqttCallback {
 
         }
     }
+
 
     // public void subscribimePuto(MQTTBroker broker){
     //     //TODO: aquí hemos hecho una suscripción al tópic /willirex/
@@ -96,7 +98,7 @@ public class MQTTSuscriber implements MqttCallback {
     public void connectionLost(Throwable cause) {
     }
 
-    
+ 
     /**
      * Cuando recibe un mensaje de un sensor de proximidad, lo lee y actualiza el valor dependiendo de si 
      * el mensaje indica si una plaza ha sido desocupada u ocupada, actualizando el valor en la bbdd
@@ -131,12 +133,20 @@ public class MQTTSuscriber implements MqttCallback {
         nSensor = Integer.parseInt(auxNSensor);
 
         if (strMessage.contains("Libre")) {
+
             Logic.updateEstadoPlaza(true, nParking, nSensor);
+            boolean reservable =Logic.getEsReservable(nSensor);
+            String fechaE = Logic.getFechaEHPlaza(nSensor);
+            Timestamp fechaS = new Timestamp(System.currentTimeMillis());
+            Logic.updateHistorialPlaza( fechaE, fechaS,nSensor);
+            
         } else if (strMessage.contains("Ocupado")){ 
             Logic.updateEstadoPlaza(false, nParking, nSensor);
+            boolean reservable =Logic.getEsReservable(nSensor);
+            Timestamp fechaE = new Timestamp(System.currentTimeMillis());
+            Logic.storeNewHistorialPlaza(fechaE, nSensor, nParking,reservable);
         }
       
-
     }
 
     @Override

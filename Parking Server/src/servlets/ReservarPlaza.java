@@ -30,25 +30,26 @@ public class ReservarPlaza extends HttpServlet {
 		String respuesta;
 		try 
 		{ 
-			int idplaza ;//=Integer.parseInt(request.getParameter("idplaza"));
-			int idparking =Integer.parseInt(request.getParameter("idpark"));
-			String nombreUsuario = request.getParameter("nombreU");
+			int idplaza = Integer.parseInt(request.getParameter("idplaza"));
+			int idparking = Integer.parseInt(request.getParameter("idpark"));
+			String nombreUsuario = request.getParameter("nombreU"); 
             String fechaI = request.getParameter("fechaI");
 			String fechaF = request.getParameter("fechaF");
-			idcliente =Logic.getIdCliente(nombreUsuario);
-			double diferenciaEnHoras= Math.abs((float)((float)(Timestamp.valueOf(fechaF).getTime() - Timestamp.valueOf(fechaI).getTime())/3600000.00)); //2.0-> 2:30 2.0
+			//idcliente = Logic.getIdCliente(nombreUsuario);
+			double diferenciaEnHoras = Math.abs((float)((float)(Timestamp.valueOf(fechaF).getTime() - Timestamp.valueOf(fechaI).getTime())/3600000.00)); //2.0-> 2:30 2.0
 			String hoursI = fechaI.substring(10, 18);
 			double precio = diferenciaEnHoras * Logic.getHoraParking(idparking,hoursI);
 			ArrayList<Plaza> values = Logic.getPlazaFromDB(idparking, fechaI, fechaF);
 			idplaza = values.get(0).getId_plaza();
 
-			boolean ok= Logic.storeNewReserva(fechaI, fechaF,idcliente, idparking, idplaza, precio);
-			respuesta ="";
+			Logic.storeNewReserva(fechaI, fechaF, nombreUsuario, idparking, idplaza, precio);
+
+			respuesta = "Plaza reservada";
     
             out.println(respuesta);
 
 		} catch (Exception e) {
-			respuesta="Plaza no disponible ";
+			respuesta = "Plaza no disponible ";
 			out.println(respuesta);
 		} finally {
 			out.close();

@@ -34,11 +34,10 @@ public class GetReservaProxima extends HttpServlet {
 		
 		try 
 		{ 
-			String idCliente = request.getParameter("idCliente");
+			String nombreU = request.getParameter("nombreU");
 			
-			ArrayList<String> values = Logic.getReservaProxima(Integer.parseInt(idCliente));
+			ArrayList<String> values = Logic.getReservaProxima(nombreU);
 
-			//String jsonReservaProxima = new Gson().toJson(values);
 			String respuesta = "";
 			Iterator<String> iterator = values.iterator();
 			while (iterator.hasNext()) {

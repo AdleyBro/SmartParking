@@ -29,8 +29,8 @@ const int mqttPort = 1883;
 const char* mqttUser = "user";
 const char* mqttPassword = "pass";
 
-#define plaza1_topic "plaza1"
-#define plaza2_topic "plaza2"
+#define plaza1_topic "/parking1/plaza1"
+#define plaza2_topic "/parking1/plaza2"
 
 bool ocupadaAntes1 = false;
 bool ocupadaAntes2 = false;

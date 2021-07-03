@@ -73,7 +73,7 @@ public class ConectionDB {
  
   public static PreparedStatement getParking(Connection con) {
 
-    return getStatement(con, "SELECT * FROM parking ");
+    return getStatement(con, "SELECT * FROM parking");
   }
 
   public static PreparedStatement getPlazasParking(Connection con) {
@@ -99,56 +99,65 @@ public class ConectionDB {
 
   public static PreparedStatement getCountUsuario(Connection con) {
 
-    return getStatement(con, "SELECT count(NombreDeUsuario) as recuento FROM cliente WHERE NombreDeUsuario=? ");
-  }
-
-  public static PreparedStatement setUsuario(Connection con) {
-    return getStatement(con, "INSERT INTO usuario (Nombre,NombreDeUsuario,Telefono,Email,UltimoAccesoParking) VALUES (?,?,?,?,?);");
+    return getStatement(con, "SELECT count(NombreDeUsuario) as recuento FROM Cliente WHERE NombreDeUsuario=? ");
   }
 
   public static PreparedStatement getCliente(Connection con) {
-    return getStatement(con, "SELECT * FROM cliente WHERE NombreDeUsuario=?");
+    return getStatement(con, "SELECT * FROM Cliente WHERE NombreDeUsuario=?");
   }
 
   public static PreparedStatement setCliente(Connection con) {
     return getStatement(con,
-        "INSERT INTO cliente VALUES(?,?,?,?,?,?);");
-  }
-
-  public static PreparedStatement updateUsuarioTS(Connection con) {
-
-    return getStatement(con, "UPDATE usuario SET UltimoAccesoParking = ? WHERE NombreDeUsuario = ?;");
+        "INSERT INTO Cliente VALUES(?,?,?,?,?,?,?);");
   }
 
   public static PreparedStatement getPassUsuario(Connection con) {
 
-    return getStatement(con, "SELECT Password FROM cliente WHERE NombreDeUsuario=?");
+    return getStatement(con, "SELECT Password FROM Cliente WHERE NombreDeUsuario=?");
   }
 
-  public static PreparedStatement getCountIdCliente(Connection con) {
-
-    return getStatement(con, "SELECT count(IdCliente) as recuento FROM cliente");
-  }
-  public static PreparedStatement getIdCliente(Connection con) {
-
-    return getStatement(con, "SELECT IdCliente FROM cliente WHERE NombreDeUsuario=?");
-  }
   public static PreparedStatement getPrecioHora(Connection con) {
 
     return getStatement(con, "SELECT precio FROM tabla_de_precios WHERE IdParking=? AND hora IN(SELECT MAX(tablaDePrecios.Hora) as hora FROM (SELECT * FROM tabla_de_precios WHERE IdParking=? AND hora <= ?) as tablaDePrecios)");
   }
   public static PreparedStatement setReserva(Connection con) {
     return getStatement(con,
-        "INSERT INTO reserva (FechaHoraFin,FechaHoraInicio,IdCliente,IdParking,IdPlaza,PrecioPagado) VALUES (?,?,?,?,?,?);");
+        "INSERT INTO reserva VALUES (?,?,?,?,?,?);");
   }
 
   public static PreparedStatement getReservaProxima(Connection con) {
-    return getStatement(con, "SELECT * FROM reserva WHERE IdCliente=? AND FechaHoraInicio>LOCALTIMESTAMP");
+    return getStatement(con, "SELECT * FROM reserva WHERE NombreDeUsuario=? AND FechaHoraInicio = (SELECT MIN(FechaHoraInicio) FROM reserva WHERE FechaHoraInicio > CURRENT_TIMESTAMP())");
   }
   
   public static PreparedStatement getLatLongParking(Connection con) {
     return getStatement(con, "SELECT Latitud, Longitud FROM parking WHERE IdParking=?");
   }
+
+  public static PreparedStatement setHistorialEntrada(Connection con) {
+    return getStatement(con,
+        "INSERT INTO HistorialEntrada VALUES(?,?,?);");
+  }
+ 
+  public static PreparedStatement setHistorialSalida(Connection con) {
+    return getStatement(con,
+        "INSERT INTO HistorialSalida VALUES(?,?,?);");
+  }
+   public static PreparedStatement setHistorialPlaza(Connection con) {
+    return getStatement(con,
+        "INSERT INTO Historial plazas VALUES(?,?,?,?);");
+  }
+  public static PreparedStatement updateHistorialPlaza(Connection con) {
+
+    return getStatement(con, "UPDATE Historial plazas SET FechaHoraSalida = ? WHERE FechaHoraEntrada = ? AND IdPlaza = ? ;");
+  }
+  public static PreparedStatement getEsReservable(Connection con) {
+    return getStatement(con, "SELECT EsReservable FROM Plaza WHERE IdPlaza=?;");
+  }
+  public static PreparedStatement getFechaE(Connection con) {
+    return getStatement(con, "SELECT FechaHoraEntrada FROM Historial plazas WHERE IdPlaza=? ORDER BY FechaHoraEntrada ASC;");
+  }
+
+
   /*
    * - Usuarios registrados en ultimo tiempo dado - Cantidad de plazas ocupadas en
    * un parking en un tiempo dado - Veces que plaza ha sido ocupada en un último

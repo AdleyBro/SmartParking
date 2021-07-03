@@ -55,43 +55,7 @@ public class Logic {
 			conector.closeConnection(con);
 		}
 	}
-	public static boolean storeNewUser(String nombre, String nombreU, int telefono, String email, Timestamp ts) {
-		ConectionDB conector = new ConectionDB();
-		Connection con = null;
-
-		try {
-
-			con = conector.obtainConnection();
-
-			PreparedStatement ps = ConectionDB.setUsuario(con);
-			ps.setString(1, nombre);
-			ps.setString(2, nombreU);
-			ps.setInt(3, telefono);
-			ps.setString(4, email);
-			ps.setString(5, sdf.format(ts));
-			
-			ps.executeUpdate();
-			return true;
-		} catch (SQLException e) {
-
-			e.printStackTrace();
-			
-			return false;
-		} catch (NullPointerException e) {
-
-			e.printStackTrace();
-
-			return false;
-		} catch (Exception e) {
-
-			e.printStackTrace();
-
-			return false;
-		} finally {
-
-			conector.closeConnection(con);
-		}
-	}
+	
 
 	public static String storeNewCliente(String nombreU, String nombre, String email, int telefono, String password, Timestamp fechaRegistro) {
 		ConectionDB conector = new ConectionDB();
@@ -107,6 +71,7 @@ public class Logic {
 			ps.setInt(4, telefono);
 			ps.setString(5, sdf.format(fechaRegistro));
 			ps.setString(6, password);
+			ps.setBoolean(7, false);
 			
 
 			
@@ -129,43 +94,6 @@ public class Logic {
 		}
 	}
 
-	public static int getCountIdCliente(int IdC) {
-		ConectionDB conector = new ConectionDB();
-		Connection con = null;
-		int conteo = 0;
-		try {
-
-			con = conector.obtainConnection();
-			
-
-			PreparedStatement ps = ConectionDB.getCountIdCliente(con);
-
-			
-			ResultSet rs = ps.executeQuery();
-
-			rs.next();
-			conteo = rs.getInt("recuento");
-
-			return conteo;
-		} catch (SQLException e) {
-			e.getMessage();
-			
-
-		} catch (NullPointerException e) {
-			e.getMessage();
-			
-
-		} catch (Exception e) {
-			e.getMessage();
-			
-
-		} finally {
-
-			conector.closeConnection(con);
-
-		}
-		return conteo;
-	}
 
 	public static boolean validPassUsuario(String nombreUsuario, String contra) {
 		ConectionDB conector = new ConectionDB();
@@ -252,7 +180,6 @@ public class Logic {
 		Connection con = null;
 		try {
 			con = conector.obtainConnection();
-			
 
 			PreparedStatement ps = ConectionDB.getPlazasParking(con);
 			ps.setInt(1, IdParking);
@@ -287,14 +214,14 @@ public class Logic {
 
 	public static ArrayList<Parking> getParkingFromDB() {
 		ArrayList<Parking> parkings = new ArrayList<Parking>();
-		
+
 		ConectionDB conector = new ConectionDB();
 		Connection con = null;
 		try {
 			con = conector.obtainConnection();
-			
+
 			PreparedStatement ps = ConectionDB.getParking(con);
-			
+
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
 				Parking parking = new Parking();
@@ -307,53 +234,19 @@ public class Logic {
 				parkings.add(parking);
 			}
 		} catch (SQLException e) {
-			
+
 		} catch (NullPointerException e) {
-			
+
 		} catch (Exception e) {
-			
+
 		} finally {
 			conector.closeConnection(con);
 		}
 		return parkings;
 	}
-	public static int getIdCliente(String nombreUsuario) {
-		ConectionDB conector = new ConectionDB();
-		Connection con = null;
-		int Idc = 0;
-		try {
+	
+	
 
-			con = conector.obtainConnection();
-			
-
-			PreparedStatement ps = ConectionDB.getIdCliente(con);
-
-			ps.setString(1, nombreUsuario);
-			ResultSet rs = ps.executeQuery();
-
-			rs.next();
-			Idc = rs.getInt("IdCliente");
-
-			
-		} catch (SQLException e) {
-			e.getMessage();
-		
-
-		} catch (NullPointerException e) {
-			e.getMessage();
-		
-
-		} catch (Exception e) {
-			e.getMessage();
-			
-
-		} finally {
-
-			conector.closeConnection(con);
-
-		}
-		return Idc;
-	}
 	public static double getHoraParking(int idparking,String hora) {
 		ConectionDB conector = new ConectionDB();
 		Connection con = null;
@@ -392,21 +285,20 @@ public class Logic {
 		}
 		return php;
 	}
-	public static boolean storeNewReserva(String fechaI, String fechaF, int idcliente, int idparking, int idplaza, double preciopagado) {
+	
+	public static boolean storeNewReserva(String fechaI, String fechaF, String nombreUsuario, int idparking, int idplaza, double preciopagado) {
 		 ConectionDB conector = new ConectionDB();
 		 Connection con = null;
 		try {
 			con = conector.obtainConnection();
-		
 
 			PreparedStatement ps = ConectionDB.setReserva(con);
 			ps.setString(1, fechaF);
 			ps.setString(2, fechaI);
-			ps.setInt(3, idcliente);
+			ps.setString(3, nombreUsuario);
 			ps.setInt(4, idparking);
 			ps.setInt(5, idplaza);
 			ps.setDouble(6, preciopagado);
-
 		
 			ps.executeUpdate();
 			return true;
@@ -442,13 +334,12 @@ public class Logic {
 			
 			ResultSet rs = ps.executeQuery();
 			rs.next();
-			datos.add(0, rs.getString("IdCliente"));
+			datos.add(0, rs.getString("NombreDeUsuario"));
 			datos.add(1, rs.getString("Nombre"));
 			datos.add(2, rs.getString("Email"));
 			datos.add(3, rs.getString("Tlf"));
-			datos.add(4, rs.getString("Password"));
-			datos.add(5, rs.getString("FechaDeRegistro"));			
-			datos.add(6, rs.getString("NombreDeUsuario"));
+			datos.add(4, rs.getString("FechaDeRegistro"));
+			datos.add(5, rs.getString("Password"));
 			
 			
 		} catch (SQLException e) {
@@ -472,7 +363,7 @@ public class Logic {
 		return datos;
 	}
 
-	public static  ArrayList<String> getReservaProxima(int idCliente) { 
+	public static  ArrayList<String> getReservaProxima(String nombreU) { 
 		ArrayList<String> datos = new ArrayList<>();
 		ConectionDB conector = new ConectionDB();
 		Connection con = null;
@@ -481,11 +372,11 @@ public class Logic {
 			con = conector.obtainConnection();
 			
 			PreparedStatement ps = ConectionDB.getReservaProxima(con);
-			ps.setInt(1, idCliente);
+			ps.setString(1, nombreU);
+
 			ResultSet rs = ps.executeQuery();
 			rs.next();
 			
-			datos.add(rs.getString("IdCliente"));
 			datos.add(rs.getString("IdPlaza"));
 			datos.add(rs.getString("FechaHoraInicio"));
 			datos.add(rs.getString("FechaHoraFin"));
@@ -526,4 +417,210 @@ public class Logic {
 
 		return datos;
 	}
+
+	public static void storeNewHistorialEntrada(Timestamp fechaE, String nombre_usuario, int idparking) {
+    	ConectionDB conector = new ConectionDB();
+    	Connection con = null;
+   		try {
+       	con = conector.obtainConnection();
+   
+
+    	PreparedStatement ps = ConectionDB.setHistorialEntrada(con);
+       
+       	ps.setString(1, sdf.format(fechaE));
+       	ps.setString(2, nombre_usuario);
+       	ps.setInt(3, idparking);
+
+   
+       	ps.executeUpdate();
+       
+   		} catch (SQLException e) {
+       		e.getMessage();
+   
+     
+   		} catch (NullPointerException e) {
+      		e.getMessage();
+   
+       
+   		} catch (Exception e) {
+       		e.getMessage();
+
+       
+   		} finally {
+       		conector.closeConnection(con);
+   		}
+	}
+
+	public static void storeNewHistorialSalida(Timestamp fechaS, String nombre_usuario, int idparking) {
+    	ConectionDB conector = new ConectionDB();
+    	Connection con = null;
+   		try {
+       		con = conector.obtainConnection();
+   
+
+       		PreparedStatement ps = ConectionDB.setHistorialSalida(con);
+       		ps.setString(1, sdf.format(fechaS));
+       		ps.setString(2, nombre_usuario);
+       		ps.setInt(3, idparking);
+
+   
+       		ps.executeUpdate();
+       
+   		} catch (SQLException e) {
+       		e.getMessage();
+   
+       		
+   		} catch (NullPointerException e) {
+       		e.getMessage();
+   
+       
+   		} catch (Exception e) {
+       		e.getMessage();
+
+       
+   		} finally {
+       		conector.closeConnection(con);
+   		}
+	}
+	public static void storeNewHistorialPlaza(Timestamp fechaE, int idplaza, int idparking,boolean esReservable) {
+    	ConectionDB conector = new ConectionDB();
+    	Connection con = null;
+   		try {
+       		con = conector.obtainConnection();
+   
+
+       		PreparedStatement ps = ConectionDB.setHistorialPlaza(con);
+       		ps.setString(1, sdf.format(fechaE));
+       		ps.setBoolean(2, esReservable);
+			ps.setInt(3, idparking);
+			ps.setInt(4, idplaza);
+
+       		ps.executeUpdate();
+       
+   		} catch (SQLException e) {
+       		e.getMessage();
+   
+       		
+   		} catch (NullPointerException e) {
+       		e.getMessage();
+   
+       
+   		} catch (Exception e) {
+       		e.getMessage();
+
+       
+   		} finally {
+       		conector.closeConnection(con);
+   		}
+	}
+	public static void updateHistorialPlaza(String fechaE,Timestamp fechaS, int idplaza) {
+    	ConectionDB conector = new ConectionDB();
+    	Connection con = null;
+   		try {
+       		con = conector.obtainConnection();
+   
+
+       		PreparedStatement ps = ConectionDB.updateHistorialPlaza(con);
+			ps.setString(1, sdf.format(fechaS));
+       		ps.setString(2, fechaE);
+       		ps.setInt(3, idplaza);
+       		
+			
+			
+
+       		ps.executeUpdate();
+       
+   		} catch (SQLException e) {
+       		e.getMessage();
+   
+       		
+   		} catch (NullPointerException e) {
+       		e.getMessage();
+   
+       
+   		} catch (Exception e) {
+       		e.getMessage();
+
+       
+   		} finally {
+       		conector.closeConnection(con);
+   		}
+	}
+
+	public static boolean getEsReservable(int idplaza) {
+		ConectionDB conector = new ConectionDB();
+		Connection con = null;
+		boolean eR = false;
+		try {
+
+			con = conector.obtainConnection();
+			
+
+			PreparedStatement ps = ConectionDB.getEsReservable(con);
+			ps.setInt(1, idplaza);
+			
+			ResultSet rs = ps.executeQuery();
+
+			rs.next();
+			eR = rs.getBoolean("EsReservable");
+
+			
+		} catch (SQLException e) {
+			e.getMessage();
+		
+
+		} catch (NullPointerException e) {
+			e.getMessage();
+		
+
+		} catch (Exception e) {
+			e.getMessage();
+			
+
+		} finally {
+
+			conector.closeConnection(con);
+
+		}
+		return eR;
+	}
+
+	public static String getFechaEHPlaza(int idplaza) {
+		ConectionDB conector = new ConectionDB();
+		Connection con = null;
+		String fechaE = " ";
+		try {
+
+			con = conector.obtainConnection();
+			
+
+			PreparedStatement ps = ConectionDB.getFechaE(con);
+			ps.setInt(1, idplaza);
+			
+			ResultSet rs = ps.executeQuery();
+
+			rs.next();
+			fechaE = rs.getString("FechaHoraEntrada");
+
+			
+		} catch (SQLException e) {
+			e.getMessage();
+		
+
+		} catch (NullPointerException e) {
+			e.getMessage();
+		
+
+		} catch (Exception e) {
+			e.getMessage();
+			
+
+		} finally {
+
+			conector.closeConnection(con);
+
+		}
+		return fechaE;
+	}
+	
 }

@@ -1,6 +1,5 @@
 package servlets;
 
-
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Timestamp;
@@ -13,22 +12,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
-
-
-
 import logic.*;
 //import logic.Logic;
-
-
 
 @WebServlet("/Registro")
 public class Registro extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-
-  
-    
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{
 		//Log.log.info("-- Creando usuario en la DB--");
@@ -41,30 +31,15 @@ public class Registro extends HttpServlet {
 			String email = request.getParameter("email");
 			String nombre = request.getParameter("nombre");
 			int telefono = Integer.parseInt(request.getParameter("tlf"));
-			int Idcliente=0;
+
 			String ok2;
 			
-			
 			Timestamp fechaDeHoy = new Timestamp(System.currentTimeMillis());
-
-
-		
-			
-		
-
-			
-
 			
 			ok2=Logic.storeNewCliente(nombreU,nombre,email,telefono,pass,fechaDeHoy);
-            
-			
 			
 			out.println(ok2);
-			
-            
-                      
-           
-            
+		
            //out.println("nombre del abonado : "+nombre+" nombre de usuario : "+ nombreU+" telefono: "+telefono+" email: "+email+" pass: "+pass);
            
 		} catch (NumberFormatException nfe) 
