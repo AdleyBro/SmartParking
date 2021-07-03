@@ -9,7 +9,7 @@ public class UserInfo {
     private static String telefono;
 
     public static void setDataFromArray(ArrayList<String> response) {
-        nombreUsuario = response.get(6);
+        nombreUsuario = response.get(0);
         nombre = response.get(1);
         email = response.get(2);
         telefono = response.get(3);
