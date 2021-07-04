@@ -31,18 +31,21 @@ public class Estadisticas extends HttpServlet {
 		    
 		try {
             int idparking = Integer.parseInt(request.getParameter("idparking"));
-            HashMap<Integer, Integer> datos = Logic.getPlazasMasUsadas(idparking);
+            HashMap<Integer, Integer> datosPlazasMasUsadas = Logic.getPlazasMasUsadas(idparking);
+			int nuevosUsuariosUltimoMes = Logic.getNUserMonth();
+			int numUsuariosAccedidoParking = Logic.getNUserParking(Integer.parseInt(request.getParameter("idparking")), request.getParameter("fechaHora"));
+			String diaConMasReservas = Logic.getDiaMasReservado(Integer.parseInt(request.getParameter("idparking")));
            
-            DefaultCategoryDataset vDatos = new DefaultCategoryDataset();
+            DefaultCategoryDataset vPlazasMasUsadas = new DefaultCategoryDataset();
 
-            for (Integer idP : datos.keySet())
-                vDatos.setValue(datos.get(idP), "", idP.toString());
+            for (Integer idP : datosPlazasMasUsadas.keySet())
+                vPlazasMasUsadas.setValue(datosPlazasMasUsadas.get(idP), "", idP.toString());
             
             JFreeChart chart = ChartFactory.createBarChart("Plazas mas ocupadas del parking nº " + idparking, "Plaza",
-                    "Cantidad", vDatos);
+                    "Cantidad", vPlazasMasUsadas);
 
-            String folderPath = "D:/1CarpetasVarias/_Universidad_/Tercer Curso/Cuatrimestre 1/Repositorio/SmartParking/Parking Server/src/main/webapp/estadisticas/";
-            ChartUtils.saveChartAsPNG(new File(folderPath + "res.png"), chart, 800, 800);
+            String folderPath = "C:\\Users\\belovedNotUsed\\AppData\\Local\\Temp";
+            ChartUtils.saveChartAsPNG(new File(folderPath + "res.png"), chart, 200 * datosPlazasMasUsadas.size(), 800);
 
 		} catch (Exception e) {
 			out.println(e.toString());

@@ -41,11 +41,11 @@ public class AbrirPuerta extends HttpServlet {
            
 			
             MQTTPublisher.publish(broker, "/servo", "on");
-            wait(10000);
+            Thread.sleep(5000);
             MQTTPublisher.publish(broker, "/servo", "off");
 
 		} catch (Exception e) {
-			out.println("-1");
+			out.print(e.toString());
 		} finally {
 			out.close();
 		}

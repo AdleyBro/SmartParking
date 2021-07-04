@@ -84,7 +84,7 @@ public class ConectionDB {
   public static PreparedStatement getPlazasParkingMosquitto(Connection con) {
 
     return getStatement(con,
-        "SELECT * FROM (SELECT * FROM plaza WHERE IdParking=?))");
+        "SELECT * FROM plaza WHERE IdParking=?");
   }
   public static PreparedStatement getCountPlazasParking(Connection con) {
 
@@ -94,7 +94,7 @@ public class ConectionDB {
 
   public static PreparedStatement updateEstadoPlazas(Connection con) {
 
-    return getStatement(con, "UPDATE plazas SET EstaOcupado=? WHERE IdParking=? AND IdPlaza=? ");
+    return getStatement(con, "UPDATE Plaza SET EstaOcupado=? WHERE IdParking=? AND IdPlaza=?;");
   }
 
   public static PreparedStatement getCountUsuario(Connection con) {
@@ -144,17 +144,17 @@ public class ConectionDB {
   }
    public static PreparedStatement setHistorialPlaza(Connection con) {
     return getStatement(con,
-        "INSERT INTO Historial plazas VALUES(?,?,?,?);");
+        "INSERT INTO `Historial plazas` VALUES(?,?,?,?,?);");
   }
   public static PreparedStatement updateHistorialPlaza(Connection con) {
 
-    return getStatement(con, "UPDATE Historial plazas SET FechaHoraSalida = ? WHERE FechaHoraEntrada = ? AND IdPlaza = ? ;");
+    return getStatement(con, "UPDATE `Historial plazas` SET FechaHoraSalida = ? WHERE FechaHoraEntrada = ? AND IdPlaza = ? ;");
   }
   public static PreparedStatement getEsReservable(Connection con) {
     return getStatement(con, "SELECT EsReservable FROM Plaza WHERE IdPlaza=?;");
   }
   public static PreparedStatement getFechaE(Connection con) {
-    return getStatement(con, "SELECT FechaHoraEntrada FROM Historial plazas WHERE IdPlaza=? ORDER BY FechaHoraEntrada ASC;");
+    return getStatement(con, "SELECT FechaHoraEntrada FROM `Historial plazas` WHERE IdPlaza=? ORDER BY FechaHoraEntrada ASC;");
   }
   public static PreparedStatement updateEstadoCliente(Connection con) {
 

@@ -15,6 +15,7 @@ import db.ConectionDB;
 import db.Parking;
 import db.Plaza;
 import db.Cliente;
+import mqtt.*;
 
 public class Logic {
 	private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -22,32 +23,33 @@ public class Logic {
 	public static void updateEstadoPlaza(boolean estaOcupado, int idparking, int idplaza) {
 		ConectionDB conector = new ConectionDB();
 		Connection con = null;
-
-		try {
+		
+		try {	
 
 			con = conector.obtainConnection();
 			
 			PreparedStatement ps = ConectionDB.updateEstadoPlazas(con);
 			ps.setBoolean(1, estaOcupado);
 			ps.setInt(2, idparking);
-			
 			ps.setInt(3, idplaza);
 			
-			ps.executeUpdate();
+			int numeroDeFilasActualizadas = ps.executeUpdate();
+			
+			MQTTPublisher.publish(ProjectInitializer.getActualBroker(), "Numero de filas actualizadas", String.valueOf(numeroDeFilasActualizadas));
 			
 		} catch (SQLException e) {
 
-			e.printStackTrace();
-
-			
+			MQTTPublisher.publish(ProjectInitializer.getActualBroker(), "SqlException", e.toString());
 			
 		} catch (NullPointerException e) {
 
 			e.printStackTrace();
+			MQTTPublisher.publish(ProjectInitializer.getActualBroker(), "NullPexception", e.toString());
 
 			
 		} catch (Exception e) {
 
+			MQTTPublisher.publish(ProjectInitializer.getActualBroker(), "Exception", e.toString());
 			e.printStackTrace();
 
 			
@@ -494,8 +496,9 @@ public class Logic {
        		PreparedStatement ps = ConectionDB.setHistorialPlaza(con);
        		ps.setString(1, sdf.format(fechaE));
        		ps.setBoolean(2, esReservable);
-			ps.setInt(3, idparking);
+			ps.setString(3, null);
 			ps.setInt(4, idplaza);
+			ps.setInt(5, idparking);
 
        		ps.executeUpdate();
        
@@ -520,16 +523,12 @@ public class Logic {
     	Connection con = null;
    		try {
        		con = conector.obtainConnection();
-   
 
        		PreparedStatement ps = ConectionDB.updateHistorialPlaza(con);
 			ps.setString(1, sdf.format(fechaS));
        		ps.setString(2, fechaE);
        		ps.setInt(3, idplaza);
        		
-			
-			
-
        		ps.executeUpdate();
        
    		} catch (SQLException e) {
@@ -557,7 +556,6 @@ public class Logic {
 
 			con = conector.obtainConnection();
 			
-
 			PreparedStatement ps = ConectionDB.getEsReservable(con);
 			ps.setInt(1, idplaza);
 			
@@ -566,7 +564,7 @@ public class Logic {
 			rs.next();
 			eR = rs.getBoolean("EsReservable");
 
-			
+			return eR;
 		} catch (SQLException e) {
 			e.getMessage();
 		
@@ -761,7 +759,7 @@ public class Logic {
 		}
 		return nUser;
 	}
-	public static int getNUserParking(int idparking, Timestamp fechaHora) {
+	public static int getNUserParking(int idparking, String fechaHora) {
 		ConectionDB conector = new ConectionDB();
 		Connection con = null;
 		int nUser=0;
@@ -771,8 +769,8 @@ public class Logic {
 
 			PreparedStatement ps = ConectionDB.getNUserParking(con);
 			ps.setInt(1, idparking);
-			ps.setString(2, sdf.format(fechaHora));
-			ps.setString(3, sdf.format(fechaHora));
+			ps.setString(2, fechaHora);
+			ps.setString(3, fechaHora);
 			ResultSet rs = ps.executeQuery();
 
 			rs.next();
