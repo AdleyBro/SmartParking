@@ -107,6 +107,7 @@ public class MQTTSuscriber implements MqttCallback {
 
     @Override
     public void connectionLost(Throwable cause) {
+        searchTopicsToSuscribe(ProjectInitializer.getActualBroker());
     }
 
  
@@ -144,13 +145,12 @@ public class MQTTSuscriber implements MqttCallback {
         nSensor = Integer.parseInt(auxNSensor);
         
         if (strMessage.contains("Libre")) {
-            MQTTPublisher.publish(ProjectInitializer.getActualBroker(), "HEYLIBRE", "BBB");
+            //MQTTPublisher.publish(ProjectInitializer.getActualBroker(), "HEYLIBRE", "BBB");
             Logic.updateEstadoPlaza(false, nParking, nSensor);
             boolean reservable = Logic.getEsReservable(nSensor);
-            String fechaE = Logic.getFechaEHPlaza(nSensor);
+            Timestamp fechaE = Logic.getFechaEHPlaza(nSensor);
             Timestamp fechaS = new Timestamp(System.currentTimeMillis());
             Logic.updateHistorialPlaza( fechaE, fechaS,nSensor);
-            
         } 
         
         if (strMessage.contains("Ocupada")) { 
@@ -158,7 +158,7 @@ public class MQTTSuscriber implements MqttCallback {
             boolean reservable = Logic.getEsReservable(nSensor);
             Timestamp fechaE = new Timestamp(System.currentTimeMillis());
             Logic.storeNewHistorialPlaza(fechaE, nSensor, nParking, reservable);
-            MQTTPublisher.publish(ProjectInitializer.getActualBroker(), "HEYOCUPADA", "AAA");
+            //MQTTPublisher.publish(ProjectInitializer.getActualBroker(), "HEYOCUPADA", "AAA");
         }
 
     }

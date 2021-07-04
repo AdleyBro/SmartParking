@@ -154,7 +154,7 @@ public class ConectionDB {
     return getStatement(con, "SELECT EsReservable FROM Plaza WHERE IdPlaza=?;");
   }
   public static PreparedStatement getFechaE(Connection con) {
-    return getStatement(con, "SELECT FechaHoraEntrada FROM `Historial plazas` WHERE IdPlaza=? ORDER BY FechaHoraEntrada ASC;");
+    return getStatement(con, "SELECT FechaHoraEntrada FROM `Historial plazas` WHERE IdPlaza=? ORDER BY FechaHoraEntrada DESC;");
   }
   public static PreparedStatement updateEstadoCliente(Connection con) {
 

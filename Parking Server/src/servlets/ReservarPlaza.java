@@ -43,7 +43,6 @@ public class ReservarPlaza extends HttpServlet {
 			if(ok){respuesta = "Plaza reservada. El número de la plaza es " + idPlaza;}
 			else{respuesta = "No hay plazas disponibles para el horario indicado";}
 			
-    
             out.println(respuesta);
 
 		} catch (Exception e) {

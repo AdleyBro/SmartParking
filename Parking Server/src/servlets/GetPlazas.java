@@ -29,10 +29,6 @@ public class GetPlazas extends HttpServlet {
 			String fechaF = request.getParameter("fechaF");
 			out.println("Fecha inicio que has puesto: " + fechaI + "\n");
 			out.println("Fecha fin que has puesto: " + fechaF + "\n");
-			//ArrayList<Plaza> values = Logic.getPlazaFromDB(parkingid, fechaI, fechaF);
-
-			//String jsonPlazas = new Gson().toJson(values);
-			//out.println(jsonPlazas);
 
 		} catch (NumberFormatException nfe) {
 			out.println("-1");

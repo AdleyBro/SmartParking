@@ -35,21 +35,21 @@ public class Logic {
 			
 			int numeroDeFilasActualizadas = ps.executeUpdate();
 			
-			MQTTPublisher.publish(ProjectInitializer.getActualBroker(), "Numero de filas actualizadas", String.valueOf(numeroDeFilasActualizadas));
+			//MQTTPublisher.publish(ProjectInitializer.getActualBroker(), "Numero de filas actualizadas", String.valueOf(numeroDeFilasActualizadas));
 			
 		} catch (SQLException e) {
 
-			MQTTPublisher.publish(ProjectInitializer.getActualBroker(), "SqlException", e.toString());
+			//MQTTPublisher.publish(ProjectInitializer.getActualBroker(), "SqlException", e.toString());
 			
 		} catch (NullPointerException e) {
 
 			e.printStackTrace();
-			MQTTPublisher.publish(ProjectInitializer.getActualBroker(), "NullPexception", e.toString());
+			//MQTTPublisher.publish(ProjectInitializer.getActualBroker(), "NullPexception", e.toString());
 
 			
 		} catch (Exception e) {
 
-			MQTTPublisher.publish(ProjectInitializer.getActualBroker(), "Exception", e.toString());
+			//MQTTPublisher.publish(ProjectInitializer.getActualBroker(), "Exception", e.toString());
 			e.printStackTrace();
 
 			
@@ -518,7 +518,7 @@ public class Logic {
        		conector.closeConnection(con);
    		}
 	}
-	public static void updateHistorialPlaza(String fechaE,Timestamp fechaS, int idplaza) {
+	public static void updateHistorialPlaza(Timestamp fechaE,Timestamp fechaS, int idplaza) {
     	ConectionDB conector = new ConectionDB();
     	Connection con = null;
    		try {
@@ -526,7 +526,7 @@ public class Logic {
 
        		PreparedStatement ps = ConectionDB.updateHistorialPlaza(con);
 			ps.setString(1, sdf.format(fechaS));
-       		ps.setString(2, fechaE);
+       		ps.setString(2, sdf.format(fechaE));
        		ps.setInt(3, idplaza);
        		
        		ps.executeUpdate();
@@ -585,10 +585,10 @@ public class Logic {
 		return eR;
 	}
 
-	public static String getFechaEHPlaza(int idplaza) {
+	public static Timestamp getFechaEHPlaza(int idplaza) {
 		ConectionDB conector = new ConectionDB();
 		Connection con = null;
-		String fechaE = " ";
+		Timestamp fechaE = new Timestamp(System.currentTimeMillis());
 		try {
 
 			con = conector.obtainConnection();
@@ -600,7 +600,8 @@ public class Logic {
 			ResultSet rs = ps.executeQuery();
 
 			rs.next();
-			fechaE = rs.getString("FechaHoraEntrada");
+			
+			fechaE = rs.getTimestamp("FechaHoraEntrada");
 
 			
 		} catch (SQLException e) {
@@ -796,47 +797,49 @@ public class Logic {
 		}
 		return nUser;
 	}
-	public static String getDiaMasReservado(int idparking) {
+
+	public static HashMap<String, Integer> getDiaMasReservado(int idparking) {
 		ConectionDB conector = new ConectionDB();
 		Connection con = null;
+		HashMap<String, Integer> diasYReservas = null;
 		String dia="";
 		int dayOw=0;
 		try {
-
+			diasYReservas = new HashMap<String, Integer>();
 			con = conector.obtainConnection();
-			
 
-			PreparedStatement ps = ConectionDB.getNUserParking(con);
+			PreparedStatement ps = ConectionDB.getDiaMasComun(con);
 			ps.setInt(1, idparking);
 			ResultSet rs = ps.executeQuery();
 
-			rs.next();
-			dayOw = rs.getInt("dia");
-			switch (dayOw) {
-				case 1:
+			while (rs.next()) {
+				dayOw = rs.getInt("dia");
+				switch (dayOw) {
+					case 1:
 					dia= "Domingo";
 					break;
-				case 2:
+					case 2:
 					dia= "Lunes";
 					break;
-				case 3:
+					case 3:
 					dia= "Martes";
 					break;
-				case 4:
+					case 4:
 					dia= "Miercoles";
 					break;
-				case 5:
+					case 5:
 					dia= "Jueves";
 					break;
-				case 6:
+					case 6:
 					dia= "Viernes";
 					break;
-				case 7:
+					case 7:
 					dia= "Sabado";
 					break;
-				
+				}
+
+				diasYReservas.put(dia, rs.getInt("recuento"));
 			}
-			
 			
 		} catch (SQLException e) {
 			e.getMessage();
@@ -855,10 +858,6 @@ public class Logic {
 			conector.closeConnection(con);
 
 		}
-		return dia;
+		return diasYReservas;
 	}
-
-
-
-
 }
